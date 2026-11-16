@@ -1,0 +1,48 @@
+const {chromium}=require('playwright');
+const assert=require('node:assert/strict');
+(async()=>{
+ const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
+ const context=await browser.newContext({locale:'en-US',viewport:{width:1440,height:900}});
+ const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto('http://localhost:8000');assert.equal(await page.locator('html').getAttribute('lang'),'en');
+ const open=async id=>page.locator(`.dock [data-app="${id}"]`).click();
+ for(const id of ['apps','projects','about','terminal','aelthoren','settings'])await open(id);
+ const term=page.locator('[data-id="terminal"]'),browserWin=page.locator('[data-id="aelthoren"]');
+ await open('terminal');await term.locator('input').fill('help');await term.locator('input').press('Enter');await term.locator('input').fill('unfinished draft');
+ await open('aelthoren');await browserWin.locator('.home-search input').fill('browser draft');
+ const position=await browserWin.getAttribute('style');
+ await open('settings');await page.selectOption('#language','zh-CN');
+ assert.equal(await page.locator('html').getAttribute('lang'),'zh-CN');assert.equal(await page.locator('.dock [data-app="projects"]').getAttribute('aria-label'),'项目');
+ assert.match(await term.locator('pre').textContent(),/显示帮助/);assert.equal(await term.locator('input').inputValue(),'unfinished draft');
+ assert.equal(await browserWin.locator('.home-search input').inputValue(),'browser draft');assert.equal(await browserWin.getAttribute('style'),position);
+ for(const id of ['apps','projects','about','settings'])assert.match(await page.locator(`[data-id="${id}"] .titlebar`).textContent(),new RegExp({apps:'应用',projects:'项目',about:'关于',settings:'设置'}[id]));
+ await page.selectOption('#language','en');assert.match(await term.locator('pre').textContent(),/Show help/);
+ await page.reload();assert.equal(await page.locator('html').getAttribute('lang'),'en');await open('settings');assert.equal(await page.locator('#language').inputValue(),'en');
+ await page.selectOption('#language','zh-CN');await page.reload();assert.equal(await page.locator('html').getAttribute('lang'),'zh-CN');
+ await open('aelthoren');const address=browserWin.locator('.address');
+ const navigate=async url=>{await address.fill(url);await address.press('Enter')};
+ assert.equal(await address.inputValue(),'aelthoren://home');assert.ok(await browserWin.locator('[data-browser="back"]').isDisabled());
+ await navigate('aelthoren://about');assert.match(await browserWin.locator('.browser-page').textContent(),/Gecko/);
+ await navigate('aelthoren://projects');assert.ok(await browserWin.locator('.browser-page .cards').isVisible());
+ await browserWin.locator('[data-browser="back"]').click();assert.equal(await address.inputValue(),'aelthoren://about');
+ await browserWin.locator('[data-browser="forward"]').click();assert.equal(await address.inputValue(),'aelthoren://projects');
+ await browserWin.locator('[data-browser="reload"]').click();assert.equal(await address.inputValue(),'aelthoren://projects');
+ await browserWin.locator('[data-browser="home"]').click();assert.equal(await address.inputValue(),'aelthoren://home');
+ await browserWin.locator('[data-browser="bookmarks"]').click();assert.ok(await browserWin.locator('.browser-bookmarks').isVisible());
+ for(const url of ['javascript:alert(1)','data:text/html,<script>alert(1)</script>','file:///etc/passwd','vbscript:msgbox(1)','https://user:password@example.com','https://','aelthoren://missing','java\tscript:alert(1)']){await navigate(url);assert.ok(await browserWin.locator('.browser-feedback').isVisible());assert.equal(await browserWin.locator('iframe').count(),0);assert.equal(await browserWin.locator('.external-link').count(),0)}
+ await navigate('https://example.com/path?q=%3Cscript%3E');assert.equal(await browserWin.locator('.external-link').getAttribute('href'),'https://example.com/path?q=%3Cscript%3E');
+ await context.route('https://example.com/**',r=>r.fulfill({body:'External test destination'}));
+ const popupPromise=page.waitForEvent('popup');await browserWin.locator('.external-link').click();const popup=await popupPromise;await popup.waitForLoadState();assert.match(popup.url(),/^https:\/\/example.com/);assert.equal(await popup.evaluate(()=>window.opener),null);await popup.close();
+ await context.route('https://duckduckgo.com/**',r=>r.fulfill({body:'Search test destination'}));
+ const searchPromise=page.waitForEvent('popup');await navigate('Evavind 中文 test');const search=await searchPromise;await search.waitForLoadState();assert.equal(new URL(search.url()).searchParams.get('q'),'Evavind 中文 test');await search.close();
+ await browserWin.locator('[data-browser="back"]').click();await navigate('aelthoren://about');assert.ok(await browserWin.locator('[data-browser="forward"]').isDisabled());
+ for(const size of [{width:320,height:568},{width:390,height:844}]){await page.setViewportSize(size);await open('aelthoren');const box=await browserWin.boundingBox();assert.ok(box.x>=0&&box.x+box.width<=size.width);assert.equal(await browserWin.evaluate(el=>el.scrollWidth>el.clientWidth),false);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false)}
+ await browserWin.locator('[data-action="min"]').click();assert.ok(await browserWin.isHidden());await open('aelthoren');assert.equal(await address.inputValue(),'aelthoren://about');
+ await browserWin.locator('[data-action="max"]').click();assert.match(await browserWin.getAttribute('class'),/maximized/);await browserWin.locator('[data-action="close"]').click();await open('aelthoren');assert.equal(await address.inputValue(),'aelthoren://home');
+ await page.setViewportSize({width:1440,height:900});await page.reload();await open('aelthoren');await page.screenshot({path:'work/phase2-browser.png'});
+ assert.deepEqual(errors,[]);
+ const fallback=await browser.newContext({locale:'fr-FR'});const fp=await fallback.newPage();await fp.goto('http://localhost:8000');assert.equal(await fp.locator('html').getAttribute('lang'),'en');
+ const zh=await browser.newContext({locale:'zh-TW'});const zp=await zh.newPage();await zp.goto('http://localhost:8000');assert.equal(await zp.locator('html').getAttribute('lang'),'zh-CN');
+ const blocked=await browser.newContext();await blocked.addInitScript(()=>{Storage.prototype.getItem=()=>{throw Error('disabled')};Storage.prototype.setItem=()=>{throw Error('disabled')}});const bp=await blocked.newPage();await bp.goto('http://localhost:8000');await bp.locator('.dock [data-app="settings"]').click();await bp.selectOption('#language','zh-CN');assert.equal(await bp.locator('html').getAttribute('lang'),'zh-CN');
+ await browser.close();console.log('PASS: Phase 2 localization, persistence, live state preservation, browser navigation/history, safe URLs, external/search popups (intercepted destinations), mobile, storage fallback');
+})().catch(e=>{console.error(e);process.exit(1)});

@@ -2,11 +2,11 @@ const { chromium } = require('playwright');
 const assert = require('node:assert/strict');
 (async()=>{
  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
- const page=await browser.newPage({viewport:{width:1440,height:900}});const errors=[];
+ const page=await browser.newPage({locale:"zh-CN",viewport:{width:1440,height:900}});const errors=[];
  page.on('pageerror',e=>errors.push(e.message));
  await page.goto('http://localhost:8000');
  await page.locator('.dock button').first().waitFor();
- assert.equal(await page.locator('.dock button').count(),5);
+ assert.equal(await page.locator('.dock button').count(),6);
  assert.equal(await page.locator('h1').textContent(),'Evavind');
  assert.ok(await page.locator('#clock').textContent());
  for(const id of ['apps','terminal','projects','about','settings']){await page.locator(`.dock [data-app="${id}"]`).click();assert.ok(await page.locator(`.window[data-id="${id}"]`).isVisible());}
@@ -29,5 +29,5 @@ const assert = require('node:assert/strict');
  await page.keyboard.press('Escape');assert.equal(await term.count(),0);
  for(const size of [{width:390,height:844},{width:320,height:568},{width:968,height:338}]){await page.setViewportSize(size);await page.locator('.dock [data-app="about"]').click();const box=await page.locator('.window[data-id="about"]').boundingBox();assert.ok(box.x>=0&&box.x+box.width<=size.width);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);}
  assert.deepEqual(errors,[]);await page.setViewportSize({width:1440,height:900});await page.reload();await page.screenshot({path:'work/desktop.png'});
- await browser.close();console.log('PASS: five apps, terminal safety/history, window controls/drag, settings persistence, three viewport sizes, no runtime errors');
+ await browser.close();console.log('PASS: Phase 1 regression, six apps, terminal safety/history, window controls/drag, settings persistence, three viewport sizes, no runtime errors');
 })().catch(e=>{console.error(e);process.exit(1)});
