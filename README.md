@@ -1,4 +1,4 @@
-# Evavind — Concept Version · Phase 2
+# Evavind — Concept Version · Phase 3
 
 Evan Windproof 的个人网站，基于 Phase 1 桌面架构增量开发。HTML、CSS、原生 JavaScript，无构建步骤，无外部运行依赖。
 
@@ -8,7 +8,43 @@ Evan Windproof 的个人网站，基于 Phase 1 桌面架构增量开发。HTML�
 python3 -m http.server 8000
 ```
 
-打开 http://localhost:8000 ，也支持直接打开 `index.html`。所有资源使用相对路径，兼容现有 GitHub Pages 托管。
+打开 http://localhost:8000 。桌面也可直接打开 `index.html`，但文章正文通过 fetch 加载，需使用 HTTP 服务器预览。所有资源使用相对路径，兼容现有 GitHub Pages 托管。
+
+## Phase 3：紧凑工具栏与静态文章
+
+Aelthoren 保留窗口标题栏，将返回、前进、刷新、主页、地址栏和书签整合到同一行。手机端缩小按钮和间距，地址栏弹性占用剩余空间。桌面与六应用 Dock 不变，文章不增加 Dock 图标。
+
+首页快捷栏及书签入口新增 **Articles / 文章**：
+
+- `aelthoren://articles`：按发布日期降序展示标题、日期、分类和摘要。
+- `aelthoren://articles/<id>`：在当前浏览器窗口内阅读 Markdown 正文。
+- 使用原有返回、前进、刷新及主页按钮；刷新重新读取正文文件。
+- 切换语言更新列表、元信息和正文，保留窗口位置、导航历史及地址栏草稿。缺少当前语言版本时回退英语。
+- 附带一篇明确标注为“示例”的双语文章，不代表真实技术研究或成果。
+
+### 发布与维护文章
+
+1. 在 `articles/<id>/` 中添加 UTF-8 的 `zh-CN.md` 和 `en.md`。
+2. 在 `articles/index.js` 数组中登记文章。ID 使用小写字母、数字和单连字符，如 `my-first-note`；日期为 `YYYY-MM-DD`，是手动指定的发布日期。
+3. 每个语言版本填写 `title`、`category`、`summary`、`file`。路径相对网站根目录，建议使用 `articles/<id>/<language>.md`。至少提供 `en` 版本。
+4. 本地启动 HTTP 服务，检查中英文列表、正文和前后导航，再提交文件。无需数据库、服务器程序或构建步骤。
+
+索引结构示例（说明用途，不是额外文章）：
+
+```javascript
+{
+  id: 'my-first-note',
+  date: '2026-11-17',
+  translations: {
+    'zh-CN': { title: '标题', category: '笔记', summary: '摘要', file: 'articles/my-first-note/zh-CN.md' },
+    en: { title: 'Title', category: 'Notes', summary: 'Summary', file: 'articles/my-first-note/en.md' }
+  }
+}
+```
+
+正文支持标题、段落、粗体、斜体、行内代码、三反引号代码块、引用、简单有序/无序列表、分隔线及 HTTP/HTTPS 链接。这是精简 Markdown 子集，不支持表格、嵌套列表、图片、原始 HTML 或完整 CommonMark 扩展。代码不执行，也没有语法高亮依赖。
+
+`js/articles.js` 将正文和元信息作为不可信文本处理，通过 DOM/textContent 创建内容，禁止原始 HTML 执行；链接仅允许 HTTP/HTTPS，使用 `noopener noreferrer`。不要将不可信 JavaScript 放入文章索引：索引本身是受代码审查的站点配置，正文才是 Markdown 数据。加载失败可使用刷新重试，过期的异步加载结果不会覆盖后续导航页面。
 
 ## Phase 2
 
@@ -56,19 +92,23 @@ python3 -m http.server 8000
 # 另一终端；可通过 CHROMIUM_PATH 指定 Chromium
 node tests/desktop.cjs
 node tests/phase2.cjs
+node tests/phase3.cjs
 ```
 
 `desktop.cjs` 保留 Phase 1 回归检查，仅更新 Dock 数量并固定中文测试环境。`phase2.cjs` 检查语言默认值/回退、切换与持久化、动态翻译和草稿保留、内部导航、历史分支、刷新、危险 URL、外部/搜索新标签页、opener 隔离、移动尺寸及存储不可用场景。外部/搜索目标通过 Playwright 拦截，验证请求地址和窗口行为，不依赖第三方页面内容。
 
-手动验收可检查：切换语言后拖动窗口、最小化恢复；在浏览器内访问三个内部地址并前后导航；输入关键词打开 DuckDuckGo；切换主题及手机尺寸。
+`phase3.cjs` 额外检查单行工具栏及按钮互不遮挡、文章入口/元信息/正文、返回/前进/刷新、中英文列表与正文、找不到文章/加载失败/过期异步结果、Markdown XSS 防护，以及 320/390/768 像素布局。
+
+手动验收可检查：切换语言后拖动窗口、最小化恢复；在浏览器内访问内部地址与文章并前后导航；输入关键词打开 DuckDuckGo；切换主题及手机尺寸。
 
 ## 文件
 
-- `index.html`、`styles.css`：保留桌面入口及主题，追加 Phase 2 资源与样式。
+- `index.html`、`styles.css`：保留桌面入口及主题，追加浏览器和文章资源与样式。
 - `app.js`：原有窗口管理器、应用、终端、时钟和设置。
 - `js/i18n.js`、`locales/`：双语资源和文本更新。
 - `js/aelthoren.js`、`assets/aelthoren.svg`：概念浏览器及标志。
-- `tests/`：Phase 1 回归和 Phase 2 自动化测试。
+- `js/articles.js`、`articles/index.js`、`articles/*/*.md`：安全 Markdown 阅读器、静态索引和双语正文。
+- `tests/`：Phase 1 回归、Phase 2 和 Phase 3 自动化测试。
 
 ## 部署与许可证
 

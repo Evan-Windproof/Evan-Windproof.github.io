@@ -1,7 +1,7 @@
 'use strict';
 window.Aelthoren = (() => {
   const HOME = 'aelthoren://home';
-  const INTERNAL = [HOME, 'aelthoren://about', 'aelthoren://projects'];
+  const INTERNAL = [HOME, 'aelthoren://about', 'aelthoren://projects', 'aelthoren://articles'];
   // Explicit schemes are never treated as search terms. Only validated HTTP(S)
   // addresses reach external links; user input is never inserted as HTML.
   function resolve(raw) {
@@ -9,7 +9,7 @@ window.Aelthoren = (() => {
     if (!value) return { type: 'internal', url: HOME };
     if (/^aelthoren:/i.test(value)) {
       const url = value.toLowerCase().replace(/\/$/, '');
-      return INTERNAL.includes(url) ? { type: 'internal', url } : { type: 'error', key: 'notFound' };
+      return (INTERNAL.includes(url) || /^aelthoren:\/\/articles\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(url)) ? { type: 'internal', url } : { type: 'error', key: 'notFound' };
     }
     if (/^[a-z][a-z\d+.-]*:/i.test(value)) {
       try {
@@ -25,22 +25,24 @@ window.Aelthoren = (() => {
   function mount(win, { projectMarkup, aboutMarkup }) {
     const { t, text: tx } = I18n;
     const root = win.querySelector('.window-content');root.classList.add('browser-content');
-    root.innerHTML = `<div class="browser-toolbar"><div class="browser-actions">${[['back','←'],['forward','→'],['reload','↻'],['home','⌂'],['bookmarks','☆']].map(([id,glyph])=>`<button type="button" data-browser="${id}" data-i18n-aria-label="${id}" data-i18n-title="${id}" aria-label="${t(id)}" title="${t(id)}">${glyph}</button>`).join('')}</div><form class="address-form"><input class="address" aria-label="${t('address')}" data-i18n-aria-label="address" spellcheck="false" autocomplete="off" autocapitalize="off"><button data-i18n="go">${t('go')}</button></form></div><div class="browser-bookmarks" hidden></div><p class="browser-feedback" role="status" hidden></p><div class="browser-page"></div>`;
+    root.innerHTML = `<div class="browser-toolbar"><div class="browser-actions">${[['back','←'],['forward','→'],['reload','↻'],['home','⌂']].map(([id,glyph])=>`<button type="button" data-browser="${id}" data-i18n-aria-label="${id}" data-i18n-title="${id}" aria-label="${t(id)}" title="${t(id)}">${glyph}</button>`).join('')}</div><form class="address-form"><input class="address" aria-label="${t('address')}" data-i18n-aria-label="address" spellcheck="false" autocomplete="off" autocapitalize="off"><button data-i18n="go">${t('go')}</button></form><button type="button" data-browser="bookmarks" data-i18n-aria-label="bookmarks" data-i18n-title="bookmarks" aria-label="${t('bookmarks')}" title="${t('bookmarks')}" aria-expanded="false">☆</button></div><div class="browser-bookmarks" hidden></div><p class="browser-feedback" role="status" hidden></p><div class="browser-page"></div>`;
     const page=root.querySelector('.browser-page'),address=root.querySelector('.address'),feedback=root.querySelector('.browser-feedback');
-    const history=[{type:'internal',url:HOME}];let index=0;
-    const shortcuts=()=>`<div class="browser-shortcuts"><button data-navigate="https://github.com/Evan-Windproof">GitHub ↗</button><button data-navigate="https://github.com/Evan-Windproof/Evan-Windproof.github.io" data-i18n="evavindProject">${t('evavindProject')}</button><button data-navigate="aelthoren://projects" data-i18n="projects">${t('projects')}</button><button data-navigate="aelthoren://about" data-i18n="browserAbout">${t('browserAbout')}</button></div>`;
+    const history=[{type:'internal',url:HOME}];let index=0, renderVersion=0;
+    const shortcuts=()=>`<div class="browser-shortcuts"><button data-navigate="https://github.com/Evan-Windproof">GitHub ↗</button><button data-navigate="https://github.com/Evan-Windproof/Evan-Windproof.github.io" data-i18n="evavindProject">${t('evavindProject')}</button><button data-navigate="aelthoren://projects" data-i18n="projects">${t('projects')}</button><button data-navigate="aelthoren://articles" data-i18n="articles">${t('articles')}</button><button data-navigate="aelthoren://about" data-i18n="browserAbout">${t('browserAbout')}</button></div>`;
     root.querySelector('.browser-bookmarks').innerHTML=shortcuts();
     function showFeedback(key) { feedback.hidden=false;feedback.dataset.i18n=key;feedback.textContent=t(key); }
     function render() {
-      const current=history[index];address.value=current.url;
+      const version=++renderVersion;const current=history[index];address.value=current.url;
       root.querySelector('[data-browser="back"]').disabled=index===0;
       root.querySelector('[data-browser="forward"]').disabled=index===history.length-1;
       if(current.type==='external') {
         page.innerHTML=`${tx('externalTitle','h2')}${tx('externalNote','p','muted')}<p class="external-url"></p><a class="external-link" target="_blank" rel="noopener noreferrer" data-i18n="openExternal">${t('openExternal')}</a>`;
         page.querySelector('.external-url').textContent=current.url;
         page.querySelector('.external-link').href=current.url;
+      } else if(current.url==='aelthoren://articles') { Articles.list(page);
+      } else if(current.url.startsWith('aelthoren://articles/')) { Articles.read(page,current.url.slice('aelthoren://articles/'.length),()=>version===renderVersion && win.isConnected);
       } else if(current.url===HOME) {
-        page.innerHTML=`<div class="browser-home"><img class="aelthoren-logo" src="assets/aelthoren.svg" alt="Aelthoren"><h2>Aelthoren</h2><p class="tag">WEB CONCEPT / MOCK BROWSER</p><form class="home-search"><input data-i18n-placeholder="search" data-i18n-aria-label="address" placeholder="${t('search')}" aria-label="${t('address')}" autocomplete="off" autocapitalize="off"><button data-i18n="go">${t('go')}</button></form>${tx('searchNote','p','muted')}${tx('shortcuts','h3')}${shortcuts()}</div>`;
+        page.innerHTML=`<div class="browser-home"><img class="aelthoren-logo" src="assets/aelthoren.svg" alt="Aelthoren"><h2>Aelthoren</h2><form class="home-search"><input data-i18n-placeholder="search" data-i18n-aria-label="address" placeholder="${t('search')}" aria-label="${t('address')}" autocomplete="off" autocapitalize="off"><button data-i18n="go">${t('go')}</button></form>${tx('searchNote','p','muted')}${tx('shortcuts','h3')}${shortcuts()}</div>`;
         page.querySelector('form').addEventListener('submit',e=>{e.preventDefault();navigate(e.currentTarget.querySelector('input').value)});
       } else if(current.url==='aelthoren://projects') page.innerHTML=projectMarkup();
       else page.innerHTML=`<img class="aelthoren-logo small" src="assets/aelthoren.svg" alt="Aelthoren">${tx('browserAbout','h2')}${tx('browserNotice','p','muted')}<hr>${aboutMarkup()}`;
@@ -70,7 +72,7 @@ window.Aelthoren = (() => {
     });
     // Translate existing nodes rather than remounting: preserve drafts, selection,
     // scroll, current address, bookmark visibility and instance-only history.
-    win.translateBrowser=()=>I18n.translate(root);
+    win.translateBrowser=()=>{I18n.translate(root);if(history[index].url.startsWith('aelthoren://articles')){const draft=address.value,scroll=page.scrollTop;render();address.value=draft;page.scrollTop=scroll}};
     render();
   }
   return { mount, resolve };

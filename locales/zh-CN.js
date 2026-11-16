@@ -69,3 +69,11 @@ window.EvavindLocales["zh-CN"] = {
   "searchNote": "搜索结果将在新标签页中打开 DuckDuckGo。",
   "meta": "Evavind — Evan Windproof 的个人桌面。探索开源项目、操作系统与开发笔记。"
 };
+
+Object.assign(window.EvavindLocales['zh-CN'], {
+  "articles": "文章",
+  "articlesIntro": "文章与笔记。示例内容均明确标注。",
+  "articleLoading": "正在加载文章…",
+  "articleMissing": "未找到这篇文章。",
+  "articleError": "无法加载文章，请尝试刷新。本地 Markdown 文件需要通过 HTTP 服务器访问。"
+});

@@ -69,3 +69,11 @@ window.EvavindLocales["en"] = {
   "searchNote": "Search results open on DuckDuckGo in a new tab.",
   "meta": "Evavind — Evan Windproof’s personal desktop. Open-source projects, operating systems, and development notes."
 };
+
+Object.assign(window.EvavindLocales['en'], {
+  "articles": "Articles",
+  "articlesIntro": "Notes and articles. Example content is explicitly labeled.",
+  "articleLoading": "Loading article…",
+  "articleMissing": "Article not found.",
+  "articleError": "Unable to load this article. Please try Reload. Local Markdown files require an HTTP server."
+});
