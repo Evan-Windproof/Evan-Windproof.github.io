@@ -77,3 +77,12 @@ Object.assign(window.EvavindLocales['zh-CN'], {
   "articleMissing": "未找到这篇文章。",
   "articleError": "无法加载文章，请尝试刷新。本地 Markdown 文件需要通过 HTTP 服务器访问。"
 });
+
+Object.assign(window.EvavindLocales['zh-CN'], {
+  "dockVisibility": "Dock 显示方式",
+  "dockAlways": "始终显示",
+  "dockAuto": "自动隐藏",
+  "dockHidden": "始终隐藏",
+  "dockReveal": "展开 Dock",
+  "dockHint": "自动隐藏：移至或点击底部区域，或用 Tab 聚焦展开区域。Ctrl + Alt + D 在始终隐藏与始终显示之间切换。右上角设置按钮始终可用。"
+});

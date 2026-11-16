@@ -1,4 +1,4 @@
-# Evavind — Concept Version · Phase 3
+# Evavind — Concept Version · Phase 3.1
 
 Evan Windproof 的个人网站，基于 Phase 1 桌面架构增量开发。HTML、CSS、原生 JavaScript，无构建步骤，无外部运行依赖。
 
@@ -9,6 +9,20 @@ python3 -m http.server 8000
 ```
 
 打开 http://localhost:8000 。桌面也可直接打开 `index.html`，但文章正文通过 fetch 加载，需使用 HTTP 服务器预览。所有资源使用相对路径，兼容现有 GitHub Pages 托管。
+
+## Phase 3.1：Dock 显示控制与阶段性收尾
+
+在 Settings 的 **Dock Visibility / Dock 显示方式** 中选择：
+
+- **Always Show / 始终显示**：默认，保持原有 Dock 行为。
+- **Auto Hide / 自动隐藏**：闲置时收起至桌面外，鼠标移至底部窄触发区显示，离开后延迟 350ms 收起；移入 Dock 或焦点位于 Dock 内时保持展开。触屏点击底部短线区域展开，点击其他区域收起。
+- **Always Hide / 始终隐藏**：Dock 及触发区域完全隐藏，但不关闭或重建运行中的应用。右上角设置按钮始终可用，可随时恢复模式。
+
+自动隐藏时，键盘用户可用 Tab 聚焦底部展开区域，再 Tab 进入 Dock。**Ctrl + Alt + D** 将当前模式切换为始终隐藏；再次按下切换为始终显示并聚焦第一个应用。快捷键切换也会同步设置选项并保存。隐藏 Dock 后关闭或最小化窗口，焦点返回右上角设置按钮，避免焦点落入隐藏控件。
+
+模式存入原有 `evavind-settings.dockVisibility`，不影响主题、语言、时钟等字段；存储不可用时仍可切换，只是不跨刷新保存。新增选项、提示、触发区标签均即时切换中英文。自动隐藏不改变窗口尺寸或位置；收起后的 Dock 不拦截窗口点击，只有底部 18px 窄触发区保留交互。
+
+至此进入阶段性稳定维护：后续以 Bug 修复、体验优化和文章内容更新为主，不主动增加大型功能。
 
 ## Phase 3：紧凑工具栏与静态文章
 
@@ -93,11 +107,14 @@ python3 -m http.server 8000
 node tests/desktop.cjs
 node tests/phase2.cjs
 node tests/phase3.cjs
+node tests/phase31.cjs
 ```
 
 `desktop.cjs` 保留 Phase 1 回归检查，仅更新 Dock 数量并固定中文测试环境。`phase2.cjs` 检查语言默认值/回退、切换与持久化、动态翻译和草稿保留、内部导航、历史分支、刷新、危险 URL、外部/搜索新标签页、opener 隔离、移动尺寸及存储不可用场景。外部/搜索目标通过 Playwright 拦截，验证请求地址和窗口行为，不依赖第三方页面内容。
 
 `phase3.cjs` 额外检查单行工具栏及按钮互不遮挡、文章入口/元信息/正文、返回/前进/刷新、中英文列表与正文、找不到文章/加载失败/过期异步结果、Markdown XSS 防护，以及 320/390/768 像素布局。
+
+`phase31.cjs` 检查三种 Dock 模式、鼠标隐藏/恢复、焦点访问、设置恢复入口、快捷键、运行中应用保留、三模式刷新持久化、中英文选项、手机触控及禁用存储。
 
 手动验收可检查：切换语言后拖动窗口、最小化恢复；在浏览器内访问内部地址与文章并前后导航；输入关键词打开 DuckDuckGo；切换主题及手机尺寸。
 
@@ -108,7 +125,8 @@ node tests/phase3.cjs
 - `js/i18n.js`、`locales/`：双语资源和文本更新。
 - `js/aelthoren.js`、`assets/aelthoren.svg`：概念浏览器及标志。
 - `js/articles.js`、`articles/index.js`、`articles/*/*.md`：安全 Markdown 阅读器、静态索引和双语正文。
-- `tests/`：Phase 1 回归、Phase 2 和 Phase 3 自动化测试。
+- `js/dock.js`：独立的 Dock 显示控制，复用原有设置系统。
+- `tests/`：Phase 1–3 回归及 Phase 3.1 自动化测试。
 
 ## 部署与许可证
 

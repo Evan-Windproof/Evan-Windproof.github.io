@@ -77,3 +77,12 @@ Object.assign(window.EvavindLocales['en'], {
   "articleMissing": "Article not found.",
   "articleError": "Unable to load this article. Please try Reload. Local Markdown files require an HTTP server."
 });
+
+Object.assign(window.EvavindLocales['en'], {
+  "dockVisibility": "Dock Visibility",
+  "dockAlways": "Always Show",
+  "dockAuto": "Auto Hide",
+  "dockHidden": "Always Hide",
+  "dockReveal": "Show Dock",
+  "dockHint": "Auto Hide: move to or tap the bottom edge, or focus the reveal area with Tab. Ctrl + Alt + D switches between hidden and always shown. Settings remains available at the top right."
+});
