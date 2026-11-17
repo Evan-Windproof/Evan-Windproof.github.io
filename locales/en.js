@@ -31,6 +31,8 @@ window.EvavindLocales["en"] = {
   "aboutTitle": "I’m Evan Windproof.",
   "welcome": "Welcome to Evavind, my personal space on the web.",
   "bio": "A space for open-source projects, operating systems, and development notes. This desktop is a concept version, with more to come.",
+  "contact": "Contact",
+  "email": "Email",
   "findMe": "Find me on GitHub ↗",
   "build": "BUILD · EXPLORE · DOCUMENT",
   "makeYours": "MAKE IT YOURS",

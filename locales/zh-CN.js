@@ -31,6 +31,8 @@ window.EvavindLocales["zh-CN"] = {
   "aboutTitle": "我是 Evan Windproof。",
   "welcome": "欢迎来到 Evavind，我的个人网络空间。",
   "bio": "这里用于展示开源项目、探索操作系统，并记录开发笔记。这个桌面是网站的概念版本，更多内容将逐步加入。",
+  "contact": "联系方式",
+  "email": "邮箱",
   "findMe": "在 GitHub 上找到我 ↗",
   "build": "构建 · 探索 · 记录",
   "makeYours": "打造你的桌面",

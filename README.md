@@ -10,6 +10,13 @@ python3 -m http.server 8000
 
 打开 http://localhost:8000 。桌面也可直接打开 `index.html`，但文章正文通过 fetch 加载，需使用 HTTP 服务器预览。所有资源使用相对路径，兼容现有 GitHub Pages 托管。
 
+## 联系方式
+
+现有 About / 关于页面包含 Contact / 联系方式区域，支持即时切换中英文，沿用深浅主题。Aelthoren 的关于页复用该内容。
+
+- Email：[evan.windproof@tutanota.de](mailto:evan.windproof@tutanota.de)，点击调用设备默认邮件应用。
+- GitHub：https://github.com/Evan-Windproof
+
 ## Phase 3.1：Dock 显示控制与阶段性收尾
 
 在 Settings 的 **Dock Visibility / Dock 显示方式** 中选择：
