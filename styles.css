@@ -9,3 +9,4 @@
 /* Reclaim the Dock's reserved space for maximized windows while it is hidden. */
 #desktop[data-dock-mode="hidden"] .window.maximized{height:calc(100% - 72px)}
 #desktop[data-dock-mode="auto"]:not(.dock-expanded) .window.maximized{height:calc(100% - 78px)}
+.dock-avatar{display:grid;place-items:center;flex:0 0 40px;height:40px;user-select:none;pointer-events:none}.dock-avatar img{display:block;width:28px;height:28px;object-fit:contain}@media(max-width:600px){.dock-avatar{flex-basis:36px}}
