@@ -6,6 +6,8 @@ window.EvavindLocales["zh-CN"] = {
   "about": "关于",
   "settings": "设置",
   "aelthoren": "Aelthoren",
+  "cLearning": "C 语言学习",
+  "orfreonSite": "Orfreon 官网",
   "desktop": "Evavind 桌面",
   "windows": "应用窗口",
   "dock": "应用 Dock",
