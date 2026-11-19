@@ -6,6 +6,8 @@ window.EvavindLocales["en"] = {
   "about": "About",
   "settings": "Settings",
   "aelthoren": "Aelthoren",
+  "cLearning": "Learn C",
+  "orfreonSite": "Orfreon website",
   "desktop": "Evavind desktop",
   "windows": "Application windows",
   "dock": "Application Dock",
