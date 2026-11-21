@@ -23,7 +23,7 @@ const assert=require('node:assert/strict');
  const navigate=async url=>{await address.fill(url);await address.press('Enter')};
  assert.equal(await address.inputValue(),'aelthoren://home');assert.ok(await browserWin.locator('[data-browser="back"]').isDisabled());
  await navigate('aelthoren://about');assert.match(await browserWin.locator('.browser-page').textContent(),/Gecko/);
- await navigate('aelthoren://projects');assert.ok(await browserWin.locator('.browser-page .cards').isVisible());
+ await navigate('aelthoren://projects');assert.ok(await browserWin.locator('.browser-page .project-showcase').isVisible());
  await browserWin.locator('[data-browser="back"]').click();assert.equal(await address.inputValue(),'aelthoren://about');
  await browserWin.locator('[data-browser="forward"]').click();assert.equal(await address.inputValue(),'aelthoren://projects');
  await browserWin.locator('[data-browser="reload"]').click();assert.equal(await address.inputValue(),'aelthoren://projects');

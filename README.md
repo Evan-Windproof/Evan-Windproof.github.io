@@ -172,3 +172,9 @@ node tests/dock-window.cjs
 网址：https://evan-windproof.github.io/ 。沿用已有 GitHub Pages 配置，正式博客发布使用上方 GitHub Actions 流程。
 
 保留原有 [LICENSE](LICENSE)：GNU GPL v3（GPL-3.0）。
+
+## 项目展示中心
+
+桌面「项目与探索」与 `aelthoren://projects` 共用 `js/projects.js`。新增项目时填写名称、GitHub 仓库名、分类、三语摘要，并按需填写已核验的状态与官网。四个分类各自渲染一次，筛选仅改变当前窗口内分类的可见性。界面切换语言时会就地更新文字。运行 `node tests/projects.cjs` 验证项目页（本地预览端口 8000）。
+
+2026-11-22 查阅了 12 个公开仓库的 README、描述及许可证信息。Evavind OS 和 Liberpony OS 没有 GitHub 识别的许可证，根目录 `LICENSE` 查询也未找到。Aelthoren 的 GitHub 许可证字段未归类，根目录 `LICENSE` 标明 MIT。Glivand OS 元数据显示为私有，公开 README、许可证和进度无法核验。
