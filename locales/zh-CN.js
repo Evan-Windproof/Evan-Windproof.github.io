@@ -1,5 +1,6 @@
 window.EvavindLocales = window.EvavindLocales || {};
 window.EvavindLocales["zh-CN"] = {
+  "backDesktop": "返回桌面",
   "apps": "应用",
   "terminal": "终端",
   "projects": "项目",
@@ -48,7 +49,7 @@ window.EvavindLocales["zh-CN"] = {
   "settingsNote": "设置仅保存在此浏览器中。时间使用设备的本地时区。",
   "command": "终端命令",
   "terminalIntro": "Evavind terminal — Concept Version\n模拟终端，不执行系统命令。输入 help 查看命令。\n",
-  "help": "help         显示帮助\nabout        关于 Evan\nprojects     打开项目\nopen <app>   打开 apps / terminal / projects / about / settings / aelthoren\ndate         本地日期时间\nwhoami       当前访客\necho <text>  输出文本\nclear        清屏",
+  "help": "help         显示帮助\nabout        关于 Evan\nprojects     打开项目\nblog         打开技术博客\nopen <app>   打开 apps / terminal / projects / about / settings / aelthoren / blog\ndate         本地日期时间\nwhoami       当前访客\necho <text>  输出文本\nclear        清屏",
   "aboutReply": "Evan Windproof · 开源项目、操作系统与开发笔记。",
   "opened": "已打开 {app}",
   "missingApp": "应用不存在。可用：{apps}",

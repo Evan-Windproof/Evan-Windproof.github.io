@@ -1,5 +1,6 @@
 window.EvavindLocales = window.EvavindLocales || {};
 window.EvavindLocales["en"] = {
+  "backDesktop": "Back to desktop",
   "apps": "Applications",
   "terminal": "Terminal",
   "projects": "Projects",
@@ -48,7 +49,7 @@ window.EvavindLocales["en"] = {
   "settingsNote": "Settings are saved only in this browser. Time uses your device’s local time zone.",
   "command": "Terminal command",
   "terminalIntro": "Evavind terminal — Concept Version\nSimulated terminal; no system commands are executed. Type help for commands.\n",
-  "help": "help         Show help\nabout        About Evan\nprojects     Open projects\nopen <app>   Open apps / terminal / projects / about / settings / aelthoren\ndate         Local date and time\nwhoami       Current visitor\necho <text>  Print text\nclear        Clear terminal",
+  "help": "help         Show help\nabout        About Evan\nprojects     Open projects\nblog         Open the technology blog\nopen <app>   Open apps / terminal / projects / about / settings / aelthoren / blog\ndate         Local date and time\nwhoami       Current visitor\necho <text>  Print text\nclear        Clear terminal",
   "aboutReply": "Evan Windproof · Open-source projects, operating systems, and development notes.",
   "opened": "Opened {app}",
   "missingApp": "Unknown app. Available: {apps}",

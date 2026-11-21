@@ -10,7 +10,7 @@ const assert=require('node:assert/strict');
  const nav=async value=>{await address.fill(value);await address.press('Enter')};
  const toolbar=async()=>{const boxes=await win.locator('.browser-toolbar [data-browser],.address').evaluateAll(els=>els.map(el=>{const r=el.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height}}));for(const b of boxes)assert.ok(Math.abs(b.y-boxes[0].y)<5);const sorted=boxes.sort((a,b)=>a.x-b.x);for(let i=1;i<sorted.length;i++)assert.ok(sorted[i].x>=sorted[i-1].x+sorted[i-1].w-1)};
  await toolbar();assert.equal(await page.locator('.dock button').count(),6);
- await win.locator('.browser-home [data-navigate="aelthoren://articles"]').click();assert.equal(await address.inputValue(),'aelthoren://articles');assert.match(await win.locator('.article-list').textContent(),/Example/);
+ assert.equal(await win.locator('.browser-home [data-navigate="aelthoren://articles"]').count(),0);await nav('aelthoren://articles');assert.equal(await address.inputValue(),'aelthoren://articles');assert.match(await win.locator('.article-list').textContent(),/Example/);
  await win.locator('.article-card button').click();assert.equal(await address.inputValue(),'aelthoren://articles/example');
  await win.locator('.markdown-body[aria-busy="false"]').waitFor();assert.match(await win.locator('.markdown-body').textContent(),/not a real technical study/);assert.equal(await win.locator('.markdown-body pre code').count(),1);assert.ok(await win.locator('time[datetime="2026-11-17"]').isVisible());
  await win.locator('[data-browser="back"]').click();assert.ok(await win.locator('.article-list').isVisible());await win.locator('[data-browser="forward"]').click();await win.locator('.markdown-body[aria-busy="false"]').waitFor();

@@ -37,7 +37,8 @@ function terminal(win){
  const render=()=>{out.textContent=(showIntro?t('terminalIntro'):'')+records.map(r=>`\nevan ~ $ ${r.raw}\n${r.reply()}\n`).join('')};render();win.translateTerminal=render;
  form.addEventListener('submit',e=>{e.preventDefault();const raw=input.value.trim();input.value='';if(!raw)return;history.push(raw);cursor=history.length;const [cmd,...args]=raw.split(/\s+/);if(cmd==='clear'){records.length=0;showIntro=false;render();return}
  let reply;const date=new Date();
- if(cmd==='open'||cmd==='projects'){const id=cmd==='projects'?'projects':args[0];if(Object.hasOwn(labels,id)){openApp(id);reply=()=>t('opened',{app:t(id)})}else reply=()=>t('missingApp',{apps:Object.keys(labels).join(', ')})}
+ if(cmd==='blog'||(cmd==='open'&&args[0]==='blog')){window.open('/blog/','_blank','noopener,noreferrer');reply=()=>t('opened',{app:t('blog')})}
+ else if(cmd==='open'||cmd==='projects'){const id=cmd==='projects'?'projects':args[0];if(Object.hasOwn(labels,id)){openApp(id);reply=()=>t('opened',{app:t(id)})}else reply=()=>t('missingApp',{apps:[...Object.keys(labels),'blog'].join(', ')})}
  else {const replies={help:()=>t('help'),about:()=>t('aboutReply'),whoami:()=>'guest@evavind',date:()=>date.toLocaleString(I18n.language),echo:()=>args.join(' ')};reply=Object.hasOwn(replies,cmd)?replies[cmd]:()=>t('unknown',{cmd})}
  records.push({raw,reply});render();win.querySelector('.window-content').scrollTop=win.querySelector('.window-content').scrollHeight;
  });input.addEventListener('keydown',e=>{if(e.key==='ArrowUp'||e.key==='ArrowDown'){e.preventDefault();cursor=Math.max(0,Math.min(history.length,cursor+(e.key==='ArrowUp'?-1:1)));input.value=history[cursor]||''}})

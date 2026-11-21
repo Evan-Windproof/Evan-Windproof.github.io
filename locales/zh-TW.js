@@ -1,5 +1,6 @@
 window.EvavindLocales = window.EvavindLocales || {};
 window.EvavindLocales["zh-TW"] = {
+  "backDesktop": "返回桌面",
   "apps": "應用",
   "terminal": "終端",
   "projects": "專案",
@@ -48,7 +49,7 @@ window.EvavindLocales["zh-TW"] = {
   "settingsNote": "設定僅儲存在此瀏覽器中。時間使用裝置的本地時區。",
   "command": "終端命令",
   "terminalIntro": "Evavind terminal — Concept Version\n模擬終端，不執行系統命令。輸入 help 檢視命令。\n",
-  "help": "help         顯示幫助\nabout        關於 Evan\nprojects     開啟專案\nopen <app>   開啟 apps / terminal / projects / about / settings / aelthoren\ndate         本地日期時間\nwhoami       當前訪客\necho <text>  輸出文字\nclear        清屏",
+  "help": "help         顯示幫助\nabout        關於 Evan\nprojects     開啟專案\nblog         開啟技術部落格\nopen <app>   開啟 apps / terminal / projects / about / settings / aelthoren / blog\ndate         本地日期時間\nwhoami       當前訪客\necho <text>  輸出文字\nclear        清屏",
   "aboutReply": "Evan Windproof · 開源專案、作業系統與開發筆記。",
   "opened": "已開啟 {app}",
   "missingApp": "應用不存在。可用：{apps}",
