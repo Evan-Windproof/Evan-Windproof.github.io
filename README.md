@@ -10,7 +10,7 @@
 - `scripts/build_blog.py`：生成独立 `/blog/<slug>/index.html`、列表、首页最新文章、`rss.xml`、`sitemap.xml` 和 `robots.txt`。
 - `blog/blog.css`、`blog/blog.js`：阅读主题、本地搜索、三语言界面，沿用原设置存储。
 - `requirements-blog.txt`：固定生成依赖（Markdown/Pygments/PyYAML/Bleach）；运行站点不需要 Python。
-- `.github/workflows/blog.yml`：推送 main 后构建静态产物并通过官方 Pages Actions 发布，复用现有 Pages 站点并保留 CNAME。
+- `.github/workflows/blog.yml`：推送 main 后构建静态产物并通过官方 Pages Actions 发布，复用现有 Pages 站点并保留 CNAME；如仍有原生分支构建，先等待同一提交的旧构建结束，再发布新产物以防覆盖。
 
 每篇 Markdown 必须填写 `title`、`description`、`date`、`updated`、`tags`（数组）、`category`、`slug`（全站唯一小写英文短横线）、`draft`（布尔值）、`language`。日期为 YYYY-MM-DD，正文从二级标题开始；slug 发布后保持不变。`draft: true` 不进入页面、搜索、RSS、首页或 sitemap。文章按日期降序排列，相邻文章导航在有相邻文章时显示。当前仅一篇明确标注的简体中文示例，无虚构成果或翻译。
 
