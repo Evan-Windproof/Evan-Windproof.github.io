@@ -4,8 +4,9 @@ description: '使用Codex开发'
 date: 2026-11-21
 updated: 2026-11-21
 tags: [技术, 开源]
-slug: my-first-article
-draft: true
+category: 项目介绍
+slug: introducing-aelthoren
+draft: false
 language: zh-CN
 ---
 
