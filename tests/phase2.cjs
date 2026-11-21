@@ -42,7 +42,7 @@ const assert=require('node:assert/strict');
  await page.setViewportSize({width:1440,height:900});await page.reload();await open('aelthoren');await page.screenshot({path:'work/phase2-browser.png'});
  assert.deepEqual(errors,[]);
  const fallback=await browser.newContext({locale:'fr-FR'});const fp=await fallback.newPage();await fp.goto('http://localhost:8000');assert.equal(await fp.locator('html').getAttribute('lang'),'en');
- const zh=await browser.newContext({locale:'zh-TW'});const zp=await zh.newPage();await zp.goto('http://localhost:8000');assert.equal(await zp.locator('html').getAttribute('lang'),'zh-CN');
+ const zh=await browser.newContext({locale:'zh-TW'});const zp=await zh.newPage();await zp.goto('http://localhost:8000');assert.equal(await zp.locator('html').getAttribute('lang'),'zh-TW');
  const blocked=await browser.newContext();await blocked.addInitScript(()=>{Storage.prototype.getItem=()=>{throw Error('disabled')};Storage.prototype.setItem=()=>{throw Error('disabled')}});const bp=await blocked.newPage();await bp.goto('http://localhost:8000');await bp.locator('.dock [data-app="settings"]').click();await bp.selectOption('#language','zh-CN');assert.equal(await bp.locator('html').getAttribute('lang'),'zh-CN');
  await browser.close();console.log('PASS: Phase 2 localization, persistence, live state preservation, browser navigation/history, safe URLs, external/search popups (intercepted destinations), mobile, storage fallback');
 })().catch(e=>{console.error(e);process.exit(1)});

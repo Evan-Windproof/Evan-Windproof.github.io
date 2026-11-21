@@ -1,7 +1,7 @@
 'use strict';
 window.I18n = (() => {
-  const supported = ['zh-CN', 'en'];
-  let language = /^zh(?:-|$)/i.test(navigator.language) ? 'zh-CN' : 'en';
+  const supported = ['zh-CN', 'zh-TW', 'en'];
+  let language = /^zh-(TW|HK|MO|Hant)/i.test(navigator.language) ? 'zh-TW' : /^zh(?:-|$)/i.test(navigator.language) ? 'zh-CN' : 'en';
   try {
     const saved = JSON.parse(localStorage.getItem('evavind-settings') || '{}');
     if (supported.includes(saved.language)) language = saved.language;

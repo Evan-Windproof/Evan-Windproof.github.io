@@ -1,6 +1,37 @@
+# Evan Windproof — Personal Technology Blog
+
+技术博客是核心内容；Evavind 桌面保留为视觉特色和兼容入口。以下历史功能继续保留。
+
+## 博客架构与本次变更
+
+原站使用 HTML/CSS/原生 JavaScript、DOM 窗口管理器和纯静态 GitHub Pages，旧 Articles 只在 Aelthoren 窗口内读取 Markdown。本次追加 Python 静态生成器，不替换窗口系统；保留 Articles 旧地址、C-Skeleton、Orfreon、GitHub/GitLab/X 和联系方式。原有界面实际仅有简体中文和英文，本次补齐繁体中文资源及语言选择；文章不自动翻译。
+
+- `content/blog/YYYY/*.md`：正式博客唯一内容源，YAML front matter + Markdown。
+- `scripts/build_blog.py`：生成独立 `/blog/<slug>/index.html`、列表、首页最新文章、`rss.xml`、`sitemap.xml` 和 `robots.txt`。
+- `blog/blog.css`、`blog/blog.js`：阅读主题、本地搜索、三语言界面，沿用原设置存储。
+- `requirements-blog.txt`：固定生成依赖（Markdown/Pygments/PyYAML/Bleach）；运行站点不需要 Python。
+- `.github/workflows/blog.yml`：推送 main 后构建静态产物并通过官方 Pages Actions 发布，Pages source 转为 workflow，保留 CNAME。
+
+每篇 Markdown 必须填写 `title`、`description`、`date`、`updated`、`tags`（数组）、`category`、`slug`（全站唯一小写英文短横线）、`draft`（布尔值）、`language`。日期为 YYYY-MM-DD，正文从二级标题开始；slug 发布后保持不变。`draft: true` 不进入页面、搜索、RSS、首页或 sitemap。文章按日期降序排列，相邻文章导航在有相邻文章时显示。当前仅一篇明确标注的简体中文示例，无虚构成果或翻译。
+
+```sh
+python3 -m venv work/venv
+work/venv/bin/pip install -r requirements-blog.txt
+work/venv/bin/python scripts/build_blog.py
+python3 -m http.server 8000
+```
+
+直接访问 `/blog/` 和 `/blog/example-systems-note/`，刷新无需桌面路由。支持 fenced code（c/cpp/rust/python/bash）、表格、图片、链接、目录和锚点；原始 HTML 经白名单清理。图片放 assets，正文路径建议从 `/assets/` 开始。本地搜索覆盖标题、摘要、分类与标签，不发送网络请求。切换界面语言不会翻译文章。
+
+生成文件一并提交便于普通静态预览；CI 每次从 Markdown 重新生成。不要手改生成文章 HTML、RSS、sitemap、highlight.css 或首页 latest 标记区域。删除文章后重新构建会依据 `blog/.generated.json` 清除旧生成页面。旧 `articles/` 内容继续按旧发布方式维护，不自动迁移或删除。
+
+## 验证与部署
+
+`python scripts/build_blog.py`、`node tests/blog.cjs`（需本地 8000 HTTP 服务）、以及下方原桌面回归测试。博客测试覆盖无 JS 独立阅读/刷新、Markdown 表格/高亮/图片/目录、搜索、RSS/sitemap、主题/繁体界面、手机排版与旧项目入口。部署使用 GitHub Pages 官方 artifact/deploy 流程，无商业服务或数据库。若仓库策略拒绝 Actions 更新 Pages source，需要管理员在 Settings → Pages → Build and deployment 选择 GitHub Actions；不要删除 CNAME 或其他项目仓库。
+
 # Evavind — Concept Version · Phase 3.1
 
-Evan Windproof 的个人网站，基于 Phase 1 桌面架构增量开发。HTML、CSS、原生 JavaScript，无构建步骤，无外部运行依赖。
+Evan Windproof 的个人网站，基于 Phase 1 桌面架构增量开发。HTML、CSS、原生 JavaScript；桌面无构建依赖，正式博客使用上方静态生成流程。
 
 ## 本地预览
 
@@ -138,6 +169,6 @@ node tests/dock-window.cjs
 
 ## 部署与许可证
 
-网址：https://evan-windproof.github.io/ 。沿用已有 GitHub Pages 配置，本次不新增发布工作流或更改 Pages 设置。
+网址：https://evan-windproof.github.io/ 。沿用已有 GitHub Pages 配置，正式博客发布使用上方 GitHub Actions 流程。
 
 保留原有 [LICENSE](LICENSE)：GNU GPL v3（GPL-3.0）。
