@@ -40,4 +40,12 @@ GitHub下载链接：https://github.com/Evan-Windproof/Aelthoren/releases#releas
 
 Evavaind上的Aelthoren还是会出的，这次结果我想对未来并不会有太大影响，这里的原因比较复杂，我也不多讲了。
 
+## Aelthoren截图
+
+已无力介绍
+
+![1](assets/blog/Aelthoren.png)
+
+![2](assets/blog/Aelthoren2.png)
+
 2026 年 11 月 23 日
