@@ -47,5 +47,3 @@ Evavaind上的Aelthoren还是会出的，这次结果我想对未来并不会有
 ![1](/assets/blog/Aelthoren.png)
 
 ![2](/assets/blog/Aelthoren2.png)
-
-2026 年 11 月 23 日
