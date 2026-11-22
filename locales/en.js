@@ -1,6 +1,9 @@
 window.EvavindLocales = window.EvavindLocales || {};
 window.EvavindLocales["en"] = {
   "backDesktop": "Back to desktop",
+  "blogTags": "Tags",
+  "blogAllTags": "All tags",
+  "blogNoTags": "No tags yet",
   "apps": "Applications",
   "terminal": "Terminal",
   "projects": "Projects",

@@ -1,6 +1,9 @@
 window.EvavindLocales = window.EvavindLocales || {};
 window.EvavindLocales["zh-TW"] = {
   "backDesktop": "返回桌面",
+  "blogTags": "標籤",
+  "blogAllTags": "所有標籤",
+  "blogNoTags": "目前沒有標籤",
   "apps": "應用",
   "terminal": "終端",
   "projects": "專案",

@@ -1,11 +1,29 @@
 """Generate only owned blog artifacts; preserve the existing desktop and projects."""
 from pathlib import Path
 import datetime as dt, email.utils, html, json, re, xml.etree.ElementTree as ET
+import hashlib, unicodedata
 import markdown, yaml, bleach
 from pygments.formatters import HtmlFormatter
 ROOT=Path(__file__).resolve().parents[1]
 BASE='https://evan.v-1.top'
 def esc(s): return html.escape(str(s),quote=True)
+def tag_key(name):
+    return unicodedata.normalize('NFC', name.strip()).casefold()
+
+def tag_id(key):
+    if len(key) <= 80 and re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', key):
+        return key
+    return 'u_' + hashlib.sha256(key.encode('utf-8')).hexdigest()
+
+def tag_url(name):
+    return f'/blog/tags/{tag_id(tag_key(name))}/'
+
+def tag_links(names):
+    if not names:
+        return ''
+    links = ''.join(f'<a class="tag-link" href="{tag_url(name)}">{esc(name.strip())}</a>' for name in names)
+    return f'<div class="tag-list">{links}</div>'
+
 def load_posts():
     posts=[]; seen=set()
     for file in sorted((ROOT/'content/blog').rglob('*.md')):
@@ -15,11 +33,18 @@ def load_posts():
         if not required<=meta.keys(): raise ValueError(f'Missing metadata: {file}')
         if type(meta['draft']) is not bool or not isinstance(meta['tags'],list): raise ValueError('Invalid draft/tags')
         slug=meta['slug']
-        if not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*',slug) or slug in seen: raise ValueError('Invalid/duplicate slug')
+        if not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*',slug) or slug in seen or slug == 'tags': raise ValueError('Invalid/duplicate slug')
         seen.add(slug)
         for key in ['date','updated']: meta[key]=dt.date.fromisoformat(str(meta[key])).isoformat()
         if meta['updated']<meta['date']: raise ValueError('updated precedes date')
         if meta['draft']: continue
+        if not all(isinstance(tag, str) for tag in meta['tags']):
+            raise ValueError(f'Tags must be strings: {file}')
+        unique_tags = {}
+        for tag in meta['tags']:
+            if key := tag_key(tag):
+                unique_tags.setdefault(key, tag)
+        meta['tags'] = list(unique_tags.values())
         md=markdown.Markdown(extensions=['fenced_code','tables','toc','codehilite'],extension_configs={'codehilite':{'guess_lang':False}})
         body=md.convert(parts[2])
         # Keep only static reading markup, safe URLs, and highlight/anchor attributes.
@@ -27,9 +52,40 @@ def load_posts():
         posts.append(dict(meta,body=body,toc=md.toc if md.toc_tokens else '',url=f'/blog/{slug}/'))
     return sorted(posts,key=lambda p:(p['date'],p['slug']),reverse=True)
 def shell(title,desc,path,body,language='zh-CN',article=False):
-    return f'''<!doctype html><html lang="{esc(language)}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(title)} — Evan Windproof</title><meta name="description" content="{esc(desc)}"><link rel="canonical" href="{BASE}{path}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}"><meta property="og:url" content="{BASE}{path}"><meta property="og:type" content="{'article' if article else 'website'}"><meta property="og:site_name" content="Evan Windproof"><link rel="alternate" type="application/rss+xml" title="Evan Windproof RSS" href="/rss.xml"><link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/blog/blog.css"><script src="/locales/zh-CN.js" defer></script><script src="/locales/zh-TW.js" defer></script><script src="/locales/en.js" defer></script><script src="/js/i18n.js" defer></script><script src="/blog/blog.js" defer></script></head><body class="blog-body"><header class="blog-header"><a href="/" data-i18n="backDesktop">返回桌面</a><nav><a href="/blog/">Blog</a><a href="/rss.xml">RSS</a></nav><label><span data-i18n="language">Language / 语言</span><select id="blog-language"><option value="zh-CN">简体中文</option><option value="zh-TW">繁體中文</option><option value="en">English</option></select></label><button id="blog-theme" data-i18n="appearance">外观</button></header><main class="blog-main">{body}</main><footer class="blog-footer"><a href="https://github.com/Evan-Windproof">Evan Windproof</a> · Personal Technology Blog · <a href="/">Evavind Desktop</a></footer></body></html>'''
+    return f'''<!doctype html><html lang="{esc(language)}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(title)} — Evan Windproof</title><meta name="description" content="{esc(desc)}"><link rel="canonical" href="{BASE}{path}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}"><meta property="og:url" content="{BASE}{path}"><meta property="og:type" content="{'article' if article else 'website'}"><meta property="og:site_name" content="Evan Windproof"><link rel="alternate" type="application/rss+xml" title="Evan Windproof RSS" href="/rss.xml"><link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/blog/blog.css"><script src="/locales/zh-CN.js" defer></script><script src="/locales/zh-TW.js" defer></script><script src="/locales/en.js" defer></script><script src="/js/i18n.js" defer></script><script src="/blog/blog.js" defer></script></head><body class="blog-body"><header class="blog-header"><a href="/" data-i18n="backDesktop">返回桌面</a><nav><a href="/blog/">Blog</a><a href="/blog/tags/" data-i18n="blogTags">标签</a><a href="/rss.xml">RSS</a></nav><label><span data-i18n="language">Language / 语言</span><select id="blog-language"><option value="zh-CN">简体中文</option><option value="zh-TW">繁體中文</option><option value="en">English</option></select></label><button id="blog-theme" data-i18n="appearance">外观</button></header><main class="blog-main">{body}</main><footer class="blog-footer"><a href="https://github.com/Evan-Windproof">Evan Windproof</a> · Personal Technology Blog · <a href="/">Evavind Desktop</a></footer></body></html>'''
 def card(p):
-    return f'<article class="post-card" data-search="{esc(" ".join([p["title"],p["description"],p["category"],*p["tags"]]))}"><time datetime="{p["date"]}">{p["date"]}</time><h2><a href="{p["url"]}">{esc(p["title"])}</a></h2><p>{esc(p["description"])}</p><p class="muted">{esc(p["category"])} · {esc(" / ".join(p["tags"]))}</p></article>'
+    return f'<article class="post-card" data-search="{esc(" ".join([p["title"],p["description"],p["category"],*p["tags"]]))}"><time datetime="{p["date"]}">{p["date"]}</time><h2><a href="{p["url"]}">{esc(p["title"])}</a></h2><p>{esc(p["description"])}</p><p class="muted">{esc(p["category"])}</p>{tag_links(p["tags"])}</article>'
+def write_tags(out, posts):
+    groups = {}
+    ids = {}
+    for post in posts:
+        for name in post['tags']:
+            key = tag_key(name)
+            identifier = tag_id(key)
+            if ids.setdefault(identifier, key) != key:
+                raise ValueError(f'Tag URL collision: {name}')
+            groups.setdefault(key, (name.strip(), []))[1].append(post)
+
+    root = out / 'tags'
+    root.mkdir(exist_ok=True)
+    overview = ['<h1 data-i18n="blogTags">标签</h1>']
+    paths = ['/blog/tags/']
+    overview.append('<div class="tag-list">')
+    for key, (name, articles) in sorted(groups.items()):
+        url = tag_url(name)
+        overview.append(f'<a class="tag-link" href="{url}">{esc(name)} <span class="tag-count">({len(articles)})</span></a>')
+        directory = root / tag_id(key)
+        directory.mkdir(exist_ok=True)
+        body = (f'<a href="/blog/tags/" data-i18n="blogAllTags">所有标签</a><h1>{esc(name)}</h1>'
+                + ''.join(map(card, articles)))
+        (directory / 'index.html').write_text(shell(name, f'Articles tagged {name}', url, body))
+        paths.append(url)
+    overview.append('</div>')
+    if not groups:
+        overview.append('<p data-i18n="blogNoTags">暂无标签</p>')
+    (root / 'index.html').write_text(shell('Tags', 'Browse articles by tag.', paths[0], ''.join(overview)))
+    return paths
+
 def build():
     posts=load_posts(); out=ROOT/'blog'; out.mkdir(exist_ok=True)
     # Remove only paths previously owned by this generator.
@@ -44,11 +100,16 @@ def build():
         for idx,label in [(i+1,'previousPost'),(i-1,'nextPost')]:
             if 0<=idx<len(posts): links.append(f'<a href="{posts[idx]["url"]}"><span data-i18n="{label}">{"上一篇" if idx>i else "下一篇"}</span>：{esc(posts[idx]["title"])}</a>')
         toc=f'<details open class="toc"><summary data-i18n="contents">目录</summary>{p["toc"]}</details>' if p['toc'] else ''
-        body=f'<a href="/blog/" data-i18n="backBlog">返回博客首页</a><article lang="{esc(p["language"])}"><header><h1>{esc(p["title"])}</h1><p><time datetime="{p["date"]}">{p["date"]}</time> · <span data-i18n="updated">更新</span> {p["updated"]}</p><p>{esc(p["category"])} · {esc(" / ".join(p["tags"]))}</p><p class="muted">{esc(p["description"])}</p></header>{toc}<div class="prose">{p["body"]}</div></article><nav class="post-nav">{"".join(links)}</nav>'
+        body=f'<a href="/blog/" data-i18n="backBlog">返回博客首页</a><article lang="{esc(p["language"])}"><header><h1>{esc(p["title"])}</h1><p><time datetime="{p["date"]}">{p["date"]}</time> · <span data-i18n="updated">更新</span> {p["updated"]}</p><p>{esc(p["category"])}</p>{tag_links(p["tags"])}<p class="muted">{esc(p["description"])}</p></header>{toc}<div class="prose">{p["body"]}</div></article><nav class="post-nav">{"".join(links)}</nav>'
         target=out/p['slug']/'index.html';target.parent.mkdir(exist_ok=True);target.write_text(shell(p['title'],p['description'],p['url'],body,p['language'],True));files.append(str(target.relative_to(ROOT)))
     listing='<p class="eyebrow">SYSTEMS / CODE / OPEN SOURCE</p><h1>Evan Windproof</h1><p data-i18n="blogIntro">独立技术博客：操作系统、系统编程与开源实验。</p><label class="search-label"><span data-i18n="blogSearch">搜索文章</span><input id="blog-search" type="search"></label><p id="search-empty" hidden data-i18n="noPosts">没有匹配的文章</p>'+''.join(map(card,posts))
     (out/'index.html').write_text(shell('Personal Technology Blog','操作系统、C / C++ / Rust 系统编程、开源项目与开发笔记。','/blog/',listing))
+    tag_paths = write_tags(out, posts)
+    files.extend(path.lstrip('/') + 'index.html' for path in tag_paths)
     manifest.write_text(json.dumps(files,indent=2))
+    fields = ('title', 'description', 'date', 'slug', 'url', 'category', 'tags', 'language')
+    index = [{key: post[key] for key in fields} for post in posts]
+    (out/'articles.json').write_text(json.dumps(index, ensure_ascii=False, indent=2) + '\n')
     rss=ET.Element('rss',version='2.0');channel=ET.SubElement(rss,'channel')
     for k,v in [('title','Evan Windproof — Personal Technology Blog'),('link',BASE+'/blog/'),('description','Systems programming, operating systems and open-source notes.')]:ET.SubElement(channel,k).text=v
     for p in posts:
@@ -56,7 +117,7 @@ def build():
         for k,v in [('title',p['title']),('link',BASE+p['url']),('guid',BASE+p['url']),('description',p['description']),('pubDate',email.utils.format_datetime(dt.datetime.fromisoformat(p['date']).replace(tzinfo=dt.timezone.utc)))]: ET.SubElement(item,k).text=v
     ET.ElementTree(rss).write(ROOT/'rss.xml',encoding='utf-8',xml_declaration=True)
     ns='http://www.sitemaps.org/schemas/sitemap/0.9';ET.register_namespace('',ns);sitemap=ET.Element('{'+ns+'}urlset')
-    for path in ['/','/blog/']+[p['url'] for p in posts]:ET.SubElement(ET.SubElement(sitemap,'{'+ns+'}url'),'{'+ns+'}loc').text=BASE+path
+    for path in ['/','/blog/']+[p['url'] for p in posts]+tag_paths:ET.SubElement(ET.SubElement(sitemap,'{'+ns+'}url'),'{'+ns+'}loc').text=BASE+path
     ET.ElementTree(sitemap).write(ROOT/'sitemap.xml',encoding='utf-8',xml_declaration=True)
     (ROOT/'robots.txt').write_text(f'User-agent: *\nAllow: /\nSitemap: {BASE}/sitemap.xml\n')
     latest='<section class="latest-posts" aria-label="Latest articles"><h2 data-i18n="latestPosts">最新文章</h2>'+''.join(f'<a href="{p["url"]}"><time>{p["date"]}</time> {esc(p["title"])}</a>' for p in posts[:3])+'</section>'

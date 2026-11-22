@@ -178,3 +178,9 @@ node tests/dock-window.cjs
 桌面「项目与探索」与 `aelthoren://projects` 共用 `js/projects.js`。新增项目时填写名称、GitHub 仓库名、分类、三语摘要，并按需填写已核验的状态与官网。四个分类各自渲染一次，筛选仅改变当前窗口内分类的可见性。界面切换语言时会就地更新文字。运行 `node tests/projects.cjs` 验证项目页（本地预览端口 8000）。
 
 2026-11-22 查阅了 12 个公开仓库的 README、描述及许可证信息。Evavind OS 和 Liberpony OS 没有 GitHub 识别的许可证，根目录 `LICENSE` 查询也未找到。Aelthoren 的 GitHub 许可证字段未归类，根目录 `LICENSE` 标明 MIT。Glivand OS 元数据显示为私有，公开 README、许可证和进度无法核验。
+
+### 博客标签
+
+在文章 Front Matter 的 `tags` 数组中填写标签，例如 `tags: [Gecko, 浏览器, "C++"]`。重新执行博客构建即可更新标签总览、静态归档和 Sitemap。草稿和空标签不参与统计。文章显示作者填写的名称，归档按去除首尾空白、Unicode NFC 和大小写折叠后的名称合并。同一篇文章对同一标签只计数一次。常规英文标签使用可读标识（如 `/blog/tags/gecko/`），中文、标点标签及较长名称使用 `u_` 加规范化名称的 SHA-256；构建时会检查路径冲突。`tags` 保留为归档路径，因此不能用作文章 slug。
+
+`/blog/articles.json` 提供已发布文章的标题、摘要、日期、slug、URL、分类、标签和语言，可供未来终端搜索使用。标签系统沿用原有 Markdown 元数据和 Pages 发布流程。

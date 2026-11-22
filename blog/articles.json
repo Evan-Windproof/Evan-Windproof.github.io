@@ -1,0 +1,45 @@
+[
+  {
+    "title": "Aelthoren：一个基于Gecko内核的浏览器",
+    "description": "使用Codex开发",
+    "date": "2026-11-21",
+    "slug": "introducing-aelthoren",
+    "url": "/blog/introducing-aelthoren/",
+    "category": "项目介绍",
+    "tags": [
+      "技术",
+      "开源"
+    ],
+    "language": "zh-CN"
+  },
+  {
+    "title": "示例：系统编程笔记的组织方式",
+    "description": "明确标注的示例文章：演示 C、C++、Rust、Python 和 Shell 代码、表格与目录，不代表作者的真实项目成果。",
+    "date": "2026-11-21",
+    "slug": "example-systems-note",
+    "url": "/blog/example-systems-note/",
+    "category": "示例",
+    "tags": [
+      "C",
+      "C++",
+      "Rust",
+      "Python",
+      "Shell"
+    ],
+    "language": "zh-CN"
+  },
+  {
+    "title": "开站公告：博客刚刚建立，但我得先处理一点意外",
+    "description": "Evan Windproof 技术博客开站公告：介绍未来的记录方向、保留的桌面特色，以及近期因忙于 Aelthoren 开发和构建而暂不设定更新周期的安排。",
+    "date": "2026-11-21",
+    "slug": "blog-opening-announcement",
+    "url": "/blog/blog-opening-announcement/",
+    "category": "公告",
+    "tags": [
+      "博客",
+      "公告",
+      "开发日志"
+    ],
+    "language": "zh-CN"
+  }
+]

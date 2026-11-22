@@ -26,11 +26,27 @@ language: zh-CN
 <script>alert(1)</script>
 [bad](javascript:alert(1))
 ''')
+    for slug, tags in [('first', '[Gecko, gecko, 中文, "C++", C, " "]'), ('second', '[GECKO]'), ('private-draft', '[Secret, Gecko]')]:
+     source=content/(slug+'.md')
+     source.write_text(source.read_text().replace('tags: [C]', 'tags: '+tags))
     build.build()
     rss=ET.parse(build.ROOT/'rss.xml');self.assertEqual(len(rss.findall('./channel/item')),2)
     self.assertEqual(rss.findtext('./channel/item/title'),'Title & <example>')
     for file in ['rss.xml','sitemap.xml','blog/index.html','index.html']:
      self.assertNotIn('private-draft',(build.ROOT/file).read_text())
+    overview=(build.ROOT/'blog/tags/index.html').read_text()
+    self.assertIn('>GECKO <span class="tag-count">(2)',overview)
+    self.assertNotIn('Secret',overview)
+    self.assertEqual(len(list((build.ROOT/'blog/tags').glob('*/index.html'))),4)
+    archive=(build.ROOT/'blog/tags/gecko/index.html').read_text()
+    self.assertLess(archive.index('/blog/second/'),archive.index('/blog/first/'))
+    for tag in ['中文','C++','C','Gecko']:
+     url=build.tag_url(tag)
+     self.assertTrue((build.ROOT/url.lstrip('/')/'index.html').exists())
+     self.assertIn(build.BASE+url,(build.ROOT/'sitemap.xml').read_text())
+    index=build.json.loads((build.ROOT/'blog/articles.json').read_text())
+    self.assertEqual([post['slug'] for post in index],['second','first'])
+    self.assertEqual(index[1]['tags'],['Gecko','中文','C++','C'])
     article=(build.ROOT/'blog/first/index.html').read_text();self.assertNotIn('<script>alert',article);self.assertNotIn('href="javascript:',article);self.assertIn('/blog/second/',article)
     with_toc=article
     self.assertIn('<details open class="toc">',with_toc)
@@ -44,5 +60,6 @@ language: zh-CN
     self.assertIn('Plain paragraph without headings.',without_toc)
     self.assertEqual(rss_before,(build.ROOT/'rss.xml').read_bytes())
     (content/'first.md').unlink();build.build();self.assertFalse((build.ROOT/'blog/first/index.html').exists())
+    self.assertFalse((build.ROOT/build.tag_url('中文').lstrip('/')/'index.html').exists())
    finally:build.ROOT=original
 if __name__=='__main__':unittest.main()
