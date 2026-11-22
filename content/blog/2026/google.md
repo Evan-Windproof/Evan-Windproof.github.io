@@ -5,7 +5,7 @@ date: 2026-11-22
 updated: 2026-11-22
 tags: [博客, 里程碑]
 category: 里程碑
-slug: blog-opening-announcement
+slug: google-search-milestone
 draft: false
 language: zh-CN
 ---
