@@ -18,4 +18,4 @@ language: zh-CN
 
 也不多说了，下面是仓库链接，有兴趣的可以看一下。
 
-仓库链接：https://github.com/Evan-Windproof/Aelthoren
+仓库链接：<https://github.com/Evan-Windproof/Aelthoren>
