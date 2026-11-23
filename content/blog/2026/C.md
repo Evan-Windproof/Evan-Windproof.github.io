@@ -5,7 +5,7 @@ date: 2026-11-23
 updated: 2026-11-23
 tags: [技术, 开源, 教学]
 category: 网站推荐
-slug: C-Skeleton
+slug: c-skeleton
 draft: false
 language: zh-CN
 ---
