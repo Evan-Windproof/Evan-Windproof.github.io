@@ -16,5 +16,3 @@ Google上的说法也基本属实，能被Google搜索到也算是已经有一�
 关键词: "Evan Windproof"
 
 ![Google搜索结果](/assets/blog/google.png)
-
-2026 年 11 月 22 日

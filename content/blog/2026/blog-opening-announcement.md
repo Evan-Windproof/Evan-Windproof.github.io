@@ -28,5 +28,3 @@ language: zh-CN
 欢迎来到 Evan Windproof 的技术博客。
 
 —— Evan Windproof
-
-2026 年 11 月 21 日
