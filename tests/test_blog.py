@@ -10,6 +10,7 @@ class BlogPublication(unittest.TestCase):
    try:
     build.ROOT=Path(folder);content=build.ROOT/'content/blog';content.mkdir(parents=True)
     (build.ROOT/'index.html').write_text('<!-- latest:start --><!-- latest:end -->')
+    (content/'placeholder.md').write_text('\n')
     for slug,draft in [('first',False),('second',False),('private-draft',True)]:
      (content/(slug+'.md')).write_text(f'''---
 title: 'Title & <example>'

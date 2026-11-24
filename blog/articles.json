@@ -1,5 +1,61 @@
 [
   {
+    "title": "Kernseed OS：小型x86_64操作系统",
+    "description": "利用Codex开发，一个教学性小型操作系统",
+    "date": "2026-11-23",
+    "slug": "kernseed",
+    "url": "/blog/kernseed/",
+    "category": "项目介绍",
+    "tags": [
+      "技术",
+      "开源",
+      "项目"
+    ],
+    "language": "zh-CN"
+  },
+  {
+    "title": "C语言学习网站",
+    "description": "自己用Codex做的",
+    "date": "2026-11-23",
+    "slug": "c-skeleton",
+    "url": "/blog/c-skeleton/",
+    "category": "网站推荐",
+    "tags": [
+      "技术",
+      "开源",
+      "教学"
+    ],
+    "language": "zh-CN"
+  },
+  {
+    "title": "Aelthoren概念版二次停止开发",
+    "description": "Aelthoren项目相关",
+    "date": "2026-11-23",
+    "slug": "blog-opening-aelthoren",
+    "url": "/blog/blog-opening-aelthoren/",
+    "category": "项目公告",
+    "tags": [
+      "公告",
+      "开发日志",
+      "项目",
+      "技术"
+    ],
+    "language": "zh-CN"
+  },
+  {
+    "title": "Google搜索可以搜索到我了",
+    "description": "比较值得纪念的里程碑",
+    "date": "2026-11-22",
+    "slug": "google-search-milestone",
+    "url": "/blog/google-search-milestone/",
+    "category": "里程碑",
+    "tags": [
+      "博客",
+      "里程碑"
+    ],
+    "language": "zh-CN"
+  },
+  {
     "title": "Aelthoren：一个基于Gecko内核的浏览器",
     "description": "使用Codex开发",
     "date": "2026-11-21",

@@ -5,7 +5,7 @@ import hashlib, unicodedata
 import markdown, yaml, bleach
 from pygments.formatters import HtmlFormatter
 ROOT=Path(__file__).resolve().parents[1]
-BASE='https://evan.v-1.top'
+BASE='https://evanwindproof.top'
 def esc(s): return html.escape(str(s),quote=True)
 def tag_key(name):
     return unicodedata.normalize('NFC', name.strip()).casefold()
@@ -27,7 +27,10 @@ def tag_links(names):
 def load_posts():
     posts=[]; seen=set()
     for file in sorted((ROOT/'content/blog').rglob('*.md')):
-        parts=file.read_text().split('---',2)
+        source = file.read_text()
+        if not source.strip():
+            continue  # An empty placeholder is not a publishable article.
+        parts=source.split('---',2)
         if len(parts)!=3 or parts[0].strip(): raise ValueError(f'Missing front matter: {file}')
         meta=yaml.safe_load(parts[1]); required={'title','description','date','updated','tags','category','slug','draft','language'}
         if not required<=meta.keys(): raise ValueError(f'Missing metadata: {file}')

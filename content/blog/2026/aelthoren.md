@@ -14,7 +14,7 @@ language: zh-CN
 
 ## 简单介绍
 
-Aelthoren是我打算未来用在我开发的另一个系统项目——[Evavind](https://github.com/evan-windproof/evavind-so)，之中的专属浏览器。
+Aelthoren是我打算未来用在我开发的另一个系统项目——[Evavind](https://github.com/Evan-Windproof/Evavind-OS)，之中的专属浏览器。
 
 主打轻量·隐私·无账户。
 

@@ -15,7 +15,7 @@ window.Projects = (() => {
     ['Aelthuvor', 'Aelthuvor', 'research', null, ['面向 Liberums 的独立 C11/i686 Ring 3 库操作系统及应用 SDK。','供 Liberums 使用的獨立 C11/i686 Ring 3 函式庫作業系統與應用程式 SDK。','An independent C11/i686 Ring 3 Library OS and application SDK for Liberums.']],
     ['Aelthoren', 'Aelthoren', 'applications', 'discontinued', ['基于 Gecko 的实验性浏览器，探索轻量、隐私和无账户设计。','以 Gecko 為基礎的實驗性瀏覽器，探索輕量化、隱私保護及免帳號設計。','An experimental Gecko-based browser exploring lightweight, private, account-free design.']],
     ['liberFPS', 'liberFPS', 'applications', null, ['使用 Godot 和 GDScript 开发的离线单人射击沙盒，已有可游玩的训练场。','以 Godot 與 GDScript 開發的離線單人射擊沙盒，已有可遊玩的訓練場。','An offline single-player FPS sandbox built with Godot and GDScript, with a playable training range.']],
-    ['Evan Windproof Website', 'Evan-Windproof.github.io', 'web', null, ['个人技术博客、开源项目入口与 Evavind 模拟桌面。','個人技術部落格、開源專案入口與 Evavind 模擬桌面。','A personal technology blog, open source project index and the Evavind mock desktop.'], 'https://evan.v-1.top/'],
+    ['Evan Windproof Website', 'Evan-Windproof.github.io', 'web', null, ['个人技术博客、开源项目入口与 Evavind 模拟桌面。','個人技術部落格、開源專案入口與 Evavind 模擬桌面。','A personal technology blog, open source project index and the Evavind mock desktop.'], 'https://evanwindproof.top/'],
     ['Orfreon Website', 'Orfreon-Website', 'web', 'preview', ['介绍 Orfreon 规划的三语静态网站原型。','介紹 Orfreon 規劃的三語靜態網站原型。','A trilingual static website prototype introducing the plans for Orfreon.'], 'https://orfreon.meoy.top/']
   ];
   const languages = ['zh-CN', 'zh-TW', 'en'];
