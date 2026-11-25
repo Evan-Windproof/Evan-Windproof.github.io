@@ -1,6 +1,6 @@
 """Generate only owned blog artifacts; preserve the existing desktop and projects."""
 from pathlib import Path
-import datetime as dt, email.utils, html, json, re, xml.etree.ElementTree as ET
+import argparse, datetime as dt, email.utils, html, json, re, xml.etree.ElementTree as ET
 import hashlib, unicodedata
 import markdown, yaml, bleach
 from pygments.formatters import HtmlFormatter
@@ -52,7 +52,8 @@ def load_posts():
         body=md.convert(parts[2])
         # Keep only static reading markup, safe URLs, and highlight/anchor attributes.
         body=bleach.clean(body,tags=['p','h1','h2','h3','h4','h5','h6','a','img','table','thead','tbody','tr','th','td','pre','code','span','div','ul','ol','li','blockquote','hr','br','strong','em'],attributes={'*':['id','class'],'a':['href','title'],'img':['src','alt','title']},protocols=['http','https','mailto'],strip=True)
-        posts.append(dict(meta,body=body,toc=md.toc if md.toc_tokens else '',url=f'/blog/{slug}/'))
+        posts.append(dict(meta,body=body,toc=md.toc if md.toc_tokens else '',url=f'/blog/{slug}/',
+                          source_path=file.relative_to(ROOT).as_posix()))
     return sorted(posts,key=lambda p:(p['date'],p['slug']),reverse=True)
 def shell(title,desc,path,body,language='zh-CN',article=False):
     return f'''<!doctype html><html lang="{esc(language)}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(title)} — Evan Windproof</title><meta name="description" content="{esc(desc)}"><link rel="canonical" href="{BASE}{path}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}"><meta property="og:url" content="{BASE}{path}"><meta property="og:type" content="{'article' if article else 'website'}"><meta property="og:site_name" content="Evan Windproof"><link rel="alternate" type="application/rss+xml" title="Evan Windproof RSS" href="/rss.xml"><link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/blog/blog.css"><script src="/locales/zh-CN.js" defer></script><script src="/locales/zh-TW.js" defer></script><script src="/locales/en.js" defer></script><script src="/js/i18n.js" defer></script><script src="/blog/blog.js" defer></script></head><body class="blog-body"><header class="blog-header"><a href="/" data-i18n="backDesktop">返回桌面</a><nav><a href="/blog/">Blog</a><a href="/blog/tags/" data-i18n="blogTags">标签</a><a href="/rss.xml">RSS</a></nav><label><span data-i18n="language">Language / 语言</span><select id="blog-language"><option value="zh-CN">简体中文</option><option value="zh-TW">繁體中文</option><option value="en">English</option></select></label><button id="blog-theme" data-i18n="appearance">外观</button></header><main class="blog-main">{body}</main><footer class="blog-footer"><a href="https://github.com/Evan-Windproof">Evan Windproof</a> · Personal Technology Blog · <a href="/">Evavind Desktop</a> · <a href="mailto:evan.windproof@tutanota.de" aria-label="Email Evan Windproof">evan.windproof@tutanota.de</a></footer></body></html>'''
@@ -127,4 +128,18 @@ def build():
     home=ROOT/'index.html';text=home.read_text();text=re.sub(r'<!-- latest:start -->.*?<!-- latest:end -->','<!-- latest:start -->'+latest+'<!-- latest:end -->',text,flags=re.S);home.write_text(text)
     (out/'highlight.css').write_text(HtmlFormatter().get_style_defs('.codehilite'))
     print(f'Built {len(posts)} published posts')
-if __name__=='__main__':build()
+    return posts
+
+if __name__=='__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--indexnow-manifest', type=Path)
+    parser.add_argument('--commit')
+    args = parser.parse_args()
+    if bool(args.indexnow_manifest) != bool(args.commit):
+        parser.error('--indexnow-manifest and --commit must be provided together')
+    posts = build()
+    if args.indexnow_manifest:
+        import indexnow_manifest
+        args.indexnow_manifest.write_bytes(
+            indexnow_manifest.encode(indexnow_manifest.generate(posts, BASE, args.commit))
+        )

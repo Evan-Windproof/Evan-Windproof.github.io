@@ -3,40 +3,155 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      retry_blocked:
+        description: Retry IndexNow batches blocked by HTTP 400 or 422 after fixing the cause
+        type: boolean
+        default: false
 permissions:
   contents: read
-  actions: read
-  pages: write
-  id-token: write
 concurrency:
-  group: pages
+  group: ${{ github.ref == 'refs/heads/main' && 'pages' || format('pages-{0}', github.ref) }}
   cancel-in-progress: false
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
+    outputs:
+      manifest: ${{ steps.artifact-names.outputs.manifest }}
+      pages: ${{ steps.artifact-names.outputs.pages }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - run: python -m pip install -r requirements-blog.txt
-      - run: python scripts/build_blog.py
+      - name: Build blog and publication manifest
+        run: python scripts/build_blog.py --indexnow-manifest "$RUNNER_TEMP/indexnow-manifest.json" --commit "$GITHUB_SHA"
+      - name: Run Python tests
+        run: python -m unittest discover -s tests
+      - name: Run browser regression tests
+        run: |
+          npm install --prefix "$RUNNER_TEMP/blog-tests" --no-save --package-lock=false playwright@1.58.2
+          export NODE_PATH="$RUNNER_TEMP/blog-tests/node_modules"
+          node "$NODE_PATH/playwright/cli.js" install --with-deps chromium
+          export CHROMIUM_PATH
+          CHROMIUM_PATH=$(node -p "require('playwright').chromium.executablePath()")
+          python -m http.server 8000 --bind 127.0.0.1 &
+          server=$!
+          trap 'kill "$server"' EXIT
+          curl --fail --silent --retry 5 --retry-delay 1 --retry-connrefused http://127.0.0.1:8000/ -o /dev/null
+          for test in tests/*.cjs; do
+            if [[ "$test" == "tests/blog.cjs" ]]; then
+              # This regression uses an editable public example article as its fixture.
+              node "$test" || echo "::warning::Blog browser regression failed. Check whether its example article changed."
+            else
+              node "$test"
+            fi
+          done
       - uses: actions/configure-pages@v5
+      - name: Name artifacts for this build attempt
+        id: artifact-names
+        run: |
+          echo "manifest=indexnow-manifest-$GITHUB_RUN_ATTEMPT" >> "$GITHUB_OUTPUT"
+          echo "pages=github-pages-$GITHUB_RUN_ATTEMPT" >> "$GITHUB_OUTPUT"
       - name: Prepare static artifact
         run: |
           mkdir -p /tmp/site
           rsync -a --exclude='.git' --exclude='.github' --exclude='work' --exclude='tests' --exclude='scripts' --exclude='content' --exclude='/.indexnow/' ./ /tmp/site/
+          printf '%s\n' "$GITHUB_SHA" > /tmp/site/indexnow-deployment.txt
       - uses: actions/upload-pages-artifact@v3
         with:
+          name: ${{ steps.artifact-names.outputs.pages }}
           path: /tmp/site
-  deploy:
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.artifact-names.outputs.manifest }}
+          path: ${{ runner.temp }}/indexnow-manifest.json
+          if-no-files-found: error
+          retention-days: 30
+  indexnow_prepare:
+    name: Stage IndexNow deployment state
+    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    continue-on-error: true
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build.outputs.manifest }}
+          path: ${{ runner.temp }}
+      - run: python3 scripts/indexnow_deploy.py prepare "$RUNNER_TEMP/indexnow-manifest.json" --commit "$GITHUB_SHA"
+  deploy:
+    needs: [build, indexnow_prepare]
+    if: ${{ !cancelled() && needs.build.result == 'success' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      pages: write
+      id-token: write
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Check that main still points at this build
+        id: main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tip=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq '.object.sha')
+          if [[ "$tip" == "$GITHUB_SHA" ]]; then
+            echo "current=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::A newer main revision is available. Skipping outdated deployment."
+          fi
       # Existing branch-based Pages may still run. Publish the newly generated
       # artifact last so a legacy build cannot overwrite new Markdown content.
       - uses: actions/deploy-pages@v4
         id: deployment
+        if: steps.main.outputs.current == 'true'
+        with:
+          artifact_name: ${{ needs.build.outputs.pages }}
+  indexnow_notify:
+    name: Notify IndexNow after production deployment
+    needs: [build, deploy]
+    if: github.ref == 'refs/heads/main' && needs.deploy.result == 'success' && needs.deploy.outputs.page_url != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    continue-on-error: true
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build.outputs.manifest }}
+          path: ${{ runner.temp }}
+      - name: Verify deployment and send pending notifications
+        env:
+          AUTOMATION: ${{ vars.INDEXNOW_AUTOMATION }}
+          RETRY_BLOCKED: ${{ inputs.retry_blocked }}
+        run: |
+          args=()
+          if [[ "$AUTOMATION" == "off" ]]; then args+=(--paused); fi
+          if [[ "$RETRY_BLOCKED" == "true" ]]; then args+=(--retry-blocked); fi
+          python3 scripts/indexnow_deploy.py notify "$RUNNER_TEMP/indexnow-manifest.json" --commit "$GITHUB_SHA" "${args[@]}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: indexnow-submissions-${{ github.run_attempt }}
+          path: .indexnow/submissions.jsonl
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 30
