@@ -121,7 +121,7 @@ def build():
         for k,v in [('title',p['title']),('link',BASE+p['url']),('guid',BASE+p['url']),('description',p['description']),('pubDate',email.utils.format_datetime(dt.datetime.fromisoformat(p['date']).replace(tzinfo=dt.timezone.utc)))]: ET.SubElement(item,k).text=v
     ET.ElementTree(rss).write(ROOT/'rss.xml',encoding='utf-8',xml_declaration=True)
     ns='http://www.sitemaps.org/schemas/sitemap/0.9';ET.register_namespace('',ns);sitemap=ET.Element('{'+ns+'}urlset')
-    for path in ['/','/blog/']+[p['url'] for p in posts]+tag_paths:ET.SubElement(ET.SubElement(sitemap,'{'+ns+'}url'),'{'+ns+'}loc').text=BASE+path
+    for path in ['/','/blog/','/projects/hooftty/']+[p['url'] for p in posts]+tag_paths:ET.SubElement(ET.SubElement(sitemap,'{'+ns+'}url'),'{'+ns+'}loc').text=BASE+path
     ET.ElementTree(sitemap).write(ROOT/'sitemap.xml',encoding='utf-8',xml_declaration=True)
     (ROOT/'robots.txt').write_text(f'User-agent: *\nAllow: /\nSitemap: {BASE}/sitemap.xml\n')
     latest='<section class="latest-posts" aria-label="Latest articles"><h2 data-i18n="latestPosts">最新文章</h2>'+''.join(f'<a href="{p["url"]}"><time>{p["date"]}</time> {esc(p["title"])}</a>' for p in posts[:3])+'</section>'

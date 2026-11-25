@@ -22,4 +22,17 @@
 .project-filter select { max-width: 100%; padding: 6px; color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; }
 .project-card { min-width: 0; overflow-wrap: anywhere; }
 .project-card .project-status { margin-top: 8px; color: var(--green); }
+.project-card.project-card-hooftty {
+  color-scheme: dark;
+  color: #e4e9e8;
+  background: #080d0d;
+  border-color: #59f5f4;
+  font-family: ui-monospace, monospace;
+}
+.project-card-hooftty .tag,
+.project-card-hooftty .project-status,
+.project-card-hooftty h3 a { color: #60ff68; }
+.project-card-hooftty a,
+.project-card-hooftty h3 span { color: #59f5f4; }
+.project-card-hooftty a:focus-visible { outline: 2px dashed #60ff68; outline-offset: 3px; }
 .project-links { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 12px; font-size: 12px; }
