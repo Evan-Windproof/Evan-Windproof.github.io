@@ -25,7 +25,7 @@ jobs:
       - name: Prepare static artifact
         run: |
           mkdir -p /tmp/site
-          rsync -a --exclude='.git' --exclude='.github' --exclude='work' --exclude='tests' --exclude='scripts' --exclude='content' ./ /tmp/site/
+          rsync -a --exclude='.git' --exclude='.github' --exclude='work' --exclude='tests' --exclude='scripts' --exclude='content' --exclude='/.indexnow/' ./ /tmp/site/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: /tmp/site
