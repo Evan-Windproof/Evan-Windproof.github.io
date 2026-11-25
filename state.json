@@ -166,15 +166,18 @@
     }
   },
   "notifications": {
-    "accepted": {},
-    "pending": {
+    "accepted": {
       "https://evanwindproof.top/blog/hooftty/": {
-        "blocked": false,
         "event": "e61f8e72cdb67f0b2cea72e0565c8631ebf4fbf0",
+        "http_status": 200,
         "kind": "current",
-        "proof": "e61f8e72cdb67f0b2cea72e0565c8631ebf4fbf0"
+        "proof": "e61f8e72cdb67f0b2cea72e0565c8631ebf4fbf0",
+        "result": "received",
+        "retry_count": 0,
+        "timestamp": "2026-11-25T09:11:59.700796+00:00"
       }
-    }
+    },
+    "pending": {}
   },
   "schema_version": 1
 }
