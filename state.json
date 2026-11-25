@@ -1,170 +1,6 @@
 {
   "deployment": {
-    "candidates": {
-      "e61f8e72cdb67f0b2cea72e0565c8631ebf4fbf0": {
-        "articles": {
-          "https://evanwindproof.top/blog/blog-opening-aelthoren/": {
-            "fingerprint": "327a13fc8ba37b62acf5005674e15f9caf4177431e12a319a0b60835356c9aea",
-            "metadata": {
-              "category": "项目公告",
-              "date": "2026-11-23",
-              "description": "Aelthoren项目相关",
-              "language": "zh-CN",
-              "tags": [
-                "公告",
-                "开发日志",
-                "项目",
-                "技术"
-              ],
-              "title": "Aelthoren概念版二次停止开发",
-              "updated": "2026-11-23"
-            },
-            "source": "content/blog/2026/aelthoren.md"
-          },
-          "https://evanwindproof.top/blog/blog-opening-announcement/": {
-            "fingerprint": "0145baf7bdc441dfd646520a8203445c5a22b9afa9deeedee8bdb682c03ab03b",
-            "metadata": {
-              "category": "公告",
-              "date": "2026-11-21",
-              "description": "Evan Windproof 技术博客开站公告：介绍未来的记录方向、保留的桌面特色，以及近期因忙于 Aelthoren 开发和构建而暂不设定更新周期的安排。",
-              "language": "zh-CN",
-              "tags": [
-                "博客",
-                "公告",
-                "开发日志"
-              ],
-              "title": "开站公告：博客刚刚建立，但我得先处理一点意外",
-              "updated": "2026-11-21"
-            },
-            "source": "content/blog/2026/blog-opening-announcement.md"
-          },
-          "https://evanwindproof.top/blog/c-skeleton/": {
-            "fingerprint": "2e75c6fa72fa2cd0dcb7442e9465760966409b528f6924ec2a78ee6a99db101c",
-            "metadata": {
-              "category": "网站推荐",
-              "date": "2026-11-23",
-              "description": "自己用Codex做的",
-              "language": "zh-CN",
-              "tags": [
-                "技术",
-                "开源",
-                "教学"
-              ],
-              "title": "C语言学习网站",
-              "updated": "2026-11-23"
-            },
-            "source": "content/blog/2026/C.md"
-          },
-          "https://evanwindproof.top/blog/example-systems-note/": {
-            "fingerprint": "273324f223bf1a3897c15e9844abf7cf4abcc0fea024602a08db99905247b6f7",
-            "metadata": {
-              "category": "示例",
-              "date": "2026-11-21",
-              "description": "明确标注的示例文章：演示 C、C++、Rust、Python 和 Shell 代码、表格与目录，不代表作者的真实项目成果。",
-              "language": "zh-CN",
-              "tags": [
-                "C",
-                "C++",
-                "Rust",
-                "Python",
-                "Shell"
-              ],
-              "title": "示例：系统编程笔记的组织方式",
-              "updated": "2026-11-21"
-            },
-            "source": "content/blog/2026/example-systems-note.md"
-          },
-          "https://evanwindproof.top/blog/google-search-milestone/": {
-            "fingerprint": "75b57424623f579053f67195f9073d6c6435b2cc26ea0f980cdcfbab57bd8c35",
-            "metadata": {
-              "category": "里程碑",
-              "date": "2026-11-22",
-              "description": "比较值得纪念的里程碑",
-              "language": "zh-CN",
-              "tags": [
-                "博客",
-                "里程碑"
-              ],
-              "title": "Google搜索可以搜索到我了",
-              "updated": "2026-11-22"
-            },
-            "source": "content/blog/2026/google.md"
-          },
-          "https://evanwindproof.top/blog/hooftty/": {
-            "fingerprint": "ebb40d51823e25d2ced6482d03fbdcd9773ef10630d91e6981ad4dfe52e5b448",
-            "metadata": {
-              "category": "项目介绍",
-              "date": "2026-11-25",
-              "description": "基于Kernseed OS开发",
-              "language": "zh-CN",
-              "tags": [
-                "技术",
-                "开源",
-                "项目",
-                "操作系统"
-              ],
-              "title": "HoofTTY-一个My Little Pony主题的纯文本操作系统",
-              "updated": "2026-11-25"
-            },
-            "source": "content/blog/2026/hooftty.md"
-          },
-          "https://evanwindproof.top/blog/introducing-aelthoren/": {
-            "fingerprint": "3b9b1d3b7584b5cd7380c2e6d6b2ebdf2c737b4e7ba91d05ff4b1883fece7aad",
-            "metadata": {
-              "category": "项目介绍",
-              "date": "2026-11-21",
-              "description": "使用Codex开发",
-              "language": "zh-CN",
-              "tags": [
-                "技术",
-                "开源"
-              ],
-              "title": "Aelthoren：一个基于Gecko内核的浏览器",
-              "updated": "2026-11-21"
-            },
-            "source": "content/blog/2026/introducing-aelthoren.md"
-          },
-          "https://evanwindproof.top/blog/kernseed/": {
-            "fingerprint": "accb3af52f66b38b19f7e6e3ff282121bd500343ebfe42ff804382b02f2c75c0",
-            "metadata": {
-              "category": "项目介绍",
-              "date": "2026-11-23",
-              "description": "利用Codex开发，一个教学性小型操作系统",
-              "language": "zh-CN",
-              "tags": [
-                "技术",
-                "开源",
-                "项目"
-              ],
-              "title": "Kernseed OS：小型x86_64操作系统",
-              "updated": "2026-11-23"
-            },
-            "source": "content/blog/2026/kernseed.md"
-          },
-          "https://evanwindproof.top/blog/xok-exos/": {
-            "fingerprint": "acc2d1bdf65ef12ca03a2b0e240c1a1e7a65822f0377a9a412f3fa3b87e72ff6",
-            "metadata": {
-              "category": "Xok/ExOS复活计划",
-              "date": "2026-11-25",
-              "description": "MIT开发Exokernel系统Xok/ExOS复活计划",
-              "language": "zh-CN",
-              "tags": [
-                "技术",
-                "开源",
-                "项目",
-                "操作系统",
-                "Exokernel"
-              ],
-              "title": "MIT Xok/ExOS复活",
-              "updated": "2026-11-25"
-            },
-            "source": "content/blog/2026/xok-exos-revival.md"
-          }
-        },
-        "commit": "e61f8e72cdb67f0b2cea72e0565c8631ebf4fbf0",
-        "schema_version": 1
-      }
-    },
+    "candidates": {},
     "published": {
       "articles": {
         "https://evanwindproof.top/blog/blog-opening-aelthoren/": {
@@ -254,6 +90,24 @@
           },
           "source": "content/blog/2026/google.md"
         },
+        "https://evanwindproof.top/blog/hooftty/": {
+          "fingerprint": "ebb40d51823e25d2ced6482d03fbdcd9773ef10630d91e6981ad4dfe52e5b448",
+          "metadata": {
+            "category": "项目介绍",
+            "date": "2026-11-25",
+            "description": "基于Kernseed OS开发",
+            "language": "zh-CN",
+            "tags": [
+              "技术",
+              "开源",
+              "项目",
+              "操作系统"
+            ],
+            "title": "HoofTTY-一个My Little Pony主题的纯文本操作系统",
+            "updated": "2026-11-25"
+          },
+          "source": "content/blog/2026/hooftty.md"
+        },
         "https://evanwindproof.top/blog/introducing-aelthoren/": {
           "fingerprint": "3b9b1d3b7584b5cd7380c2e6d6b2ebdf2c737b4e7ba91d05ff4b1883fece7aad",
           "metadata": {
@@ -307,13 +161,20 @@
           "source": "content/blog/2026/xok-exos-revival.md"
         }
       },
-      "commit": "6e332852ee30a14dc10139111b951ef4caa9f7f8",
+      "commit": "e61f8e72cdb67f0b2cea72e0565c8631ebf4fbf0",
       "schema_version": 1
     }
   },
   "notifications": {
     "accepted": {},
-    "pending": {}
+    "pending": {
+      "https://evanwindproof.top/blog/hooftty/": {
+        "blocked": false,
+        "event": "e61f8e72cdb67f0b2cea72e0565c8631ebf4fbf0",
+        "kind": "current",
+        "proof": "e61f8e72cdb67f0b2cea72e0565c8631ebf4fbf0"
+      }
+    }
   },
   "schema_version": 1
 }
