@@ -26,6 +26,21 @@ const assert = require('node:assert/strict');
     assert.equal((await page.reload()).status(), 200);
     assert.equal(await page.locator('h1').innerText(), '>_ HoofTTY');
     assert.equal(await page.locator('.terminal img').evaluate(img => img.naturalWidth), 48);
+    const release = (await page.locator('#latest-release').innerText()).split(' · ')[0];
+    assert.equal(await page.locator('.terminal-screen .green').innerText(), 'HoofTTY OS - ' + release);
+    assert.equal(await page.locator('#status a[href="#latest-release"]').innerText(), release);
+    assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'), 'https://evanwindproof.top/projects/hooftty/');
+    const imageURL = new URL(await page.locator('meta[property="og:image"]').getAttribute('content'));
+    assert.equal(imageURL.origin, 'https://evanwindproof.top');
+    const socialImage = await page.request.get(new URL(imageURL.pathname, page.url()).href);
+    assert.equal(socialImage.status(), 200);
+    const png = await socialImage.body();
+    assert.equal(png.readUInt32BE(16), 1200);
+    assert.equal(png.readUInt32BE(20), 630);
+    assert.ok(await page.evaluate(async () => {
+      await document.fonts.ready;
+      return [...document.fonts].some(font => font.family === 'Silkscreen' && font.status === 'loaded');
+    }));
     assert.equal(await page.locator('.cursor').evaluate(el => getComputedStyle(el).animationName), 'none');
 
     await page.keyboard.press('Tab');
