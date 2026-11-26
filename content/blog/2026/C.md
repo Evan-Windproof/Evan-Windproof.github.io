@@ -46,4 +46,4 @@ language: zh-CN
 
 ##链接##
 
-<https://evanwindproof.top/C-Skeleton/>
+<https://c-skeleton.evanwindproof.top/>
