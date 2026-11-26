@@ -1,5 +1,24 @@
 [
   {
+    "title": "MLP OS Archive：保存 My Little Pony 操作系统的历史",
+    "description": "这是一个收录my little pony主题操作系统的网站",
+    "date": "2026-11-26",
+    "slug": "mlp-os-archive",
+    "url": "/blog/mlp-os-archive/",
+    "category": "项目介绍",
+    "tags": [
+      "技术",
+      "档案馆",
+      "项目"
+    ],
+    "language": "zh-CN",
+    "tagUrls": [
+      "/blog/tags/u_4aa1a3c6743f7d8e154a5a04920d03d6d0d9d6d5422fb02d39228da07e83ae1c/",
+      "/blog/tags/u_b5b2e23bb1c4648c6dc968761109e58ec2c1e6ef82484f2b147dd8678f1407a3/",
+      "/blog/tags/u_79f326be4409d51fe60f4edc03b20c4b94de952d626e1616790e7b2384f08f00/"
+    ]
+  },
+  {
     "title": "MIT Xok/ExOS复活",
     "description": "MIT开发Exokernel系统Xok/ExOS复活计划",
     "date": "2026-11-25",
@@ -134,29 +153,6 @@
     "tagUrls": [
       "/blog/tags/u_4aa1a3c6743f7d8e154a5a04920d03d6d0d9d6d5422fb02d39228da07e83ae1c/",
       "/blog/tags/u_16dc8ea1cf4807b0db5c890f39c970a66f240e2d28617c0a53a7c5e0c0c4cbf0/"
-    ]
-  },
-  {
-    "title": "示例：系统编程笔记的组织方式",
-    "description": "明确标注的示例文章：演示 C、C++、Rust、Python 和 Shell 代码、表格与目录，不代表作者的真实项目成果。",
-    "date": "2026-11-21",
-    "slug": "example-systems-note",
-    "url": "/blog/example-systems-note/",
-    "category": "示例",
-    "tags": [
-      "C",
-      "C++",
-      "Rust",
-      "Python",
-      "Shell"
-    ],
-    "language": "zh-CN",
-    "tagUrls": [
-      "/blog/tags/c/",
-      "/blog/tags/u_cedb1bac7efcd7db47e9f2f2250a7c832aba83b410dd85766e2aea6ec9321e51/",
-      "/blog/tags/rust/",
-      "/blog/tags/python/",
-      "/blog/tags/shell/"
     ]
   },
   {
