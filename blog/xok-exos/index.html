@@ -1,0 +1,221 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MIT Xok/ExOS复活 — Evan Windproof</title><meta name="description" content="MIT开发Exokernel系统Xok/ExOS复活计划"><link rel="canonical" href="https://evanwindproof.top/blog/xok-exos/"><meta property="og:title" content="MIT Xok/ExOS复活"><meta property="og:description" content="MIT开发Exokernel系统Xok/ExOS复活计划"><meta property="og:url" content="https://evanwindproof.top/blog/xok-exos/"><meta property="og:type" content="article"><meta property="og:site_name" content="Evan Windproof"><link rel="alternate" type="application/rss+xml" title="Evan Windproof RSS" href="/rss.xml"><link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/blog/blog.css"><script src="/locales/zh-CN.js" defer></script><script src="/locales/zh-TW.js" defer></script><script src="/locales/en.js" defer></script><script src="/js/i18n.js" defer></script><script src="/blog/blog.js" defer></script></head><body class="blog-body"><header class="blog-header"><a href="/" data-i18n="backDesktop">返回桌面</a><nav><a href="/blog/">Blog</a><a href="/blog/tags/" data-i18n="blogTags">标签</a><a href="/rss.xml">RSS</a></nav><label><span data-i18n="language">Language / 语言</span><select id="blog-language"><option value="zh-CN">简体中文</option><option value="zh-TW">繁體中文</option><option value="en">English</option></select></label><button id="blog-theme" data-i18n="appearance">外观</button></header><main class="blog-main"><a href="/blog/" data-i18n="backBlog">返回博客首页</a><article lang="zh-CN"><header><h1>MIT Xok/ExOS复活</h1><p><time datetime="2026-11-25">2026-11-25</time> · <span data-i18n="updated">更新</span> 2026-11-25</p><p>Xok/ExOS复活计划</p><div class="tag-list"><a class="tag-link" href="/blog/tags/u_4aa1a3c6743f7d8e154a5a04920d03d6d0d9d6d5422fb02d39228da07e83ae1c/">技术</a><a class="tag-link" href="/blog/tags/u_16dc8ea1cf4807b0db5c890f39c970a66f240e2d28617c0a53a7c5e0c0c4cbf0/">开源</a><a class="tag-link" href="/blog/tags/u_79f326be4409d51fe60f4edc03b20c4b94de952d626e1616790e7b2384f08f00/">项目</a><a class="tag-link" href="/blog/tags/u_360480034cc3e9d32da9e262f001b129f80ddea134733a2e8b6268032aa139ab/">操作系统</a><a class="tag-link" href="/blog/tags/exokernel/">Exokernel</a></div><p class="muted">MIT开发Exokernel系统Xok/ExOS复活计划</p></header><details open class="toc"><summary data-i18n="contents">目录</summary><div class="toc">
+<ul>
+<li><a href="#_1">介绍</a><ul>
+<li><a href="#xokexos">Xok和ExOS是什么？</a></li>
+<li><a href="#xokexos_1">复活Xok/ExOS有什么用？</a></li>
+<li><a href="#xokexos_2">我为什么要复活Xok/ExOS？</a></li>
+</ul>
+</li>
+<li><a href="#xokexos-revival">Xok/ExOS Revival — 复活计划</a><ul>
+<li><a href="#_2">复活里程碑</a></li>
+<li><a href="#_3">已验证的成果</a></li>
+<li><a href="#_4">本次成功使用的环境</a><ul>
+<li><a href="#debian-22">自行获取 Debian 2.2</a></li>
+</ul>
+</li>
+<li><a href="#_5">启动已经准备好的环境</a></li>
+<li><a href="#exos">编译部分 ExOS 用户态程序</a></li>
+<li><a href="#nfs">NFS 根目录与隐私安全</a></li>
+<li><a href="#_6">关键修复与未完成项目</a></li>
+<li><a href="#_7">发行与可复现性</a></li>
+<li><a href="#_8">安全、许可证与署名</a></li>
+<li><a href="#_9">致谢</a></li>
+</ul>
+</li>
+<li><a href="#github">GitHub仓库链接</a></li>
+</ul>
+</div>
+</details><div class="prose"><h1 id="_1">介绍</h1>
+<h2 id="xokexos">Xok和ExOS是什么？</h2>
+<p>Xok 是 MIT 面向 x86 的 Exokernel（外核）：内核主要负责安全地分配和复用硬件资源，而不是强制为所有应用提供统一的高级操作系统抽象。</p>
+<p>ExOS 是运行于其上的libOS（库操作系统），在用户态提供类 Unix 的能力。</p>
+<p>本项目恢复的是一套已经存在的历史实现，而非开发新外核。</p>
+<p>原始资料：</p>
+<ul>
+<li><a href="https://pdos.csail.mit.edu/archive/exo/">MIT PDOS：Exokernel 项目介绍</a></li>
+<li><a href="https://pdos.csail.mit.edu/archive/exo/distrib.html">MIT PDOS：Exopc 原始源码发行页、源码快照及许可证信息</a></li>
+<li><a href="https://pdos.csail.mit.edu/archive/exo/docs.html">MIT PDOS：历史技术文档</a></li>
+</ul>
+<h2 id="xokexos_1">复活Xok/ExOS有什么用？</h2>
+<p>说实话作用不大，但是可以用于研究Exokernel系统的底层原理。</p>
+<h2 id="xokexos_2">我为什么要复活Xok/ExOS？</h2>
+<p>主要是出于个人兴趣。</p>
+<h1 id="xokexos-revival">Xok/ExOS Revival — 复活计划</h1>
+<p><strong>让 MIT 的实验性外核与库操作系统重新运行：2026 年 11 月 13 日实现交互式 Shell。</strong></p>
+<blockquote>
+<p><strong>项目状态：</strong> 这是一次历史操作系统复现与兼容性修复实验，<strong>不代表完整恢复，更不是可用于生产的操作系统</strong>。当前已经在 QEMU 中完成原生登录和交互式命令执行，但尚未在另一套全新环境中独立验证从零到成功的完整构建流程。</p>
+</blockquote>
+<h2 id="_2">复活里程碑</h2>
+<p><strong>2026 年 11 月 13 日</strong>，修复后的 <strong>Xok/ExOS</strong> 在 <strong>QEMU i386</strong> 中启动，访问 <strong>NFS 根文件系统</strong>，显示原生登录提示符，完成实验账户登录，并在 ExOS 的交互式 Shell 中执行echo指令。</p>
+<p>如下图</p>
+<p><img alt="xok1" src="https://ik.imagekit.io/lp7vr9041i/blog/OS/xok1.webp"></p>
+<p><img alt="xok2" src="https://ik.imagekit.io/lp7vr9041i/blog/OS/xok2.webp"></p>
+<p><img alt="xok3" src="https://ik.imagekit.io/lp7vr9041i/blog/OS/xok3.webp"></p>
+<h2 id="_3">已验证的成果</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Xok 内核在 QEMU i386 启动</td>
+<td>✅ 已验证</td>
+</tr>
+<tr>
+<td>修复 Tulip PCI 总线主控配置后恢复网络通信</td>
+<td>✅ 已验证</td>
+</tr>
+<tr>
+<td>NFS 根文件系统可访问及挂载</td>
+<td>✅ 已验证</td>
+</tr>
+<tr>
+<td>主机名初始化成功推进</td>
+<td>✅ 已验证</td>
+</tr>
+<tr>
+<td>原生 <code>/bin/sh</code> 编译成功并执行启动脚本</td>
+<td>✅ 已验证</td>
+</tr>
+<tr>
+<td><code>consoled</code> 显示登录提示符</td>
+<td>✅ 已验证</td>
+</tr>
+<tr>
+<td>原生 <code>/usr/bin/login</code> 完成实验账户登录</td>
+<td>✅ 已验证</td>
+</tr>
+<tr>
+<td>交互式 Shell 执行 <code>echo HELLO_EXOS</code></td>
+<td>✅ 已验证</td>
+</tr>
+<tr>
+<td>ExOS 全部用户程序</td>
+<td>⚠️ 未完整验证</td>
+</tr>
+<tr>
+<td>IRQ 15 稳定性与通用 NFS 写入</td>
+<td>⚠️ 尚未解决</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">本次成功使用的环境</h2>
+<p>这次实验使用了<strong>两套不同的环境</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>用途</th>
+<th>环境</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>QEMU 宿主环境</td>
+<td>Windows 主机中的 WSL Ubuntu</td>
+</tr>
+<tr>
+<td>QEMU 模拟目标</td>
+<td><code>qemu-system-i386</code>、64 MiB 内存、Tulip PCI 网卡、软盘启动镜像</td>
+</tr>
+<tr>
+<td>构建与 NFS 服务端</td>
+<td>VMware 中的 Debian GNU/Linux 2.2（<code>potato</code>）</td>
+</tr>
+<tr>
+<td>交叉编译器</td>
+<td>面向 <code>i386-unknown-openbsd2</code> 的 GCC <strong>2.7.2.3</strong></td>
+</tr>
+<tr>
+<td>链接器</td>
+<td>GNU ld <strong>2.8.1</strong>（BFD 2.8.1）</td>
+</tr>
+<tr>
+<td>实验 NFS 根目录</td>
+<td><code>/srv/xok-root</code></td>
+</tr>
+</tbody>
+</table>
+<p>以下地址均是<strong>本次实验配置，并非适用于所有人的默认值</strong>：Xok 客户端 <code>192.168.50.10</code>、QEMU 用户网络网关</p>
+<h3 id="debian-22">自行获取 Debian 2.2</h3>
+<p>本项目<strong>不公开分发作者正在使用的 Debian VMware 虚拟机</strong>。有兴趣复现的开发者可以自行安装 Debian 2.2，并根据记录搭建工具链：</p>
+<ul>
+<li><a href="https://www.debian.org/releases/potato/">Debian 官方 Debian 2.2（potato）版本说明</a></li>
+<li><a href="https://cloudfront.debian.net/cdimage/archive/">Debian 历史光盘镜像归档</a>：包含部分用户提供的 Debian 2.2 历史镜像，请核对架构、版本及文件完整性。</li>
+<li><a href="https://archive.debian.org/debian/dists/potato/">Debian potato 历史软件包仓库</a></li>
+</ul>
+<p><strong>注意：</strong> 原生 Debian 2.2 <strong>不自带</strong>本次使用的特定 OpenBSD 交叉工具链。工具链的准确获取与构建过程仍需补写；仅下载 Debian 后直接运行 <code>make</code>，无法保证复现成功。</p>
+<h2 id="_5">启动已经准备好的环境</h2>
+<p><strong>前提：</strong> 已有兼容的 <code>xok-nfs.img</code>、准备完毕且可访问的 ExOS NFS 根目录、正在运行的 Debian NFS 服务以及正确的网络配置。以下命令<strong>不会自动生成这些依赖</strong>。</p>
+<p>在 WSL Ubuntu 中，进入存放镜像的目录：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~/os-research/xok-boot
+
+qemu-system-i386<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-m<span class="w"> </span><span class="m">64</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-drive<span class="w"> </span><span class="nv">file</span><span class="o">=</span>xok-nfs.img,if<span class="o">=</span>floppy,format<span class="o">=</span>raw<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-boot<span class="w"> </span>a<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-nic<span class="w"> </span>none<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-netdev<span class="w"> </span>user,id<span class="o">=</span>xoknet,net<span class="o">=</span><span class="m">192</span>.168.50.0/24,host<span class="o">=</span><span class="m">192</span>.168.50.1,ipv6<span class="o">=</span>off<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-device<span class="w"> </span>tulip,netdev<span class="o">=</span>xoknet,mac<span class="o">=</span><span class="m">52</span>:54:00:12:34:56<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-object<span class="w"> </span>filter-dump,id<span class="o">=</span>xokdump,netdev<span class="o">=</span>xoknet,file<span class="o">=</span>/tmp/xok-root-test.pcap
+</code></pre></div>
+
+<p>进入 FreeDOS 后执行：</p>
+<div class="codehilite"><pre><span></span><code>boot bsd
+</code></pre></div>
+
+<p>出现 <code>login:</code> 后，使用<strong>本地预先配置的实验账户</strong>登录。不能假定任何公开镜像或根文件系统都使用原实验室的账户密码。登录进入 Shell 后执行：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span>HELLO_EXOS
+</code></pre></div>
+
+<p>如果提示找不到 <code>xok-nfs.img</code>，先确认终端的工作目录。如果卡在 NFS 挂载，优先检查 NFS 服务、双方 IP 和路由配置。</p>
+<h2 id="exos">编译部分 ExOS 用户态程序</h2>
+<p>下面的命令来自<strong>已经配置成功的历史 Debian 实验虚拟机</strong>，不是完整的交叉工具链安装教程。它假设 <code>exopc</code> 源码树及相关静态库已经准备好。</p>
+<p>关键的兼容性修复是利用 <code>-Wl,</code> 把静态库分组选项正确传递给旧版 GCC 调用的链接器：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 在 Debian 虚拟机中，从 exopc 源码根目录运行。</span>
+make<span class="w"> </span>-C<span class="w"> </span>bin/sh<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">CROSS</span><span class="o">=</span>/usr/local/openbsd-cross/bin/<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">CC_VER</span><span class="o">=</span><span class="w"> </span><span class="nv">STATIC</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">LD_RULE</span><span class="o">=</span><span class="s1">&#39;$(CC) -o $@ $(LDFLAGS) -Wl,--start-group $^ -Wl,--end-group $(GCC_LIB)&#39;</span>
+</code></pre></div>
+
+<p>把 <code>bin/sh</code> 替换为 <code>bin/login</code> 和 <code>bin/pwd_mkdb</code>，同样的 <code>LD_RULE</code> 命令行覆盖方式也曾成功构建对应程序。实验中还成功构建并部署了 <code>consoled</code>。注意：这里展示的是<strong>实际用过的命令行覆盖方式</strong>，不代表仓库已经包含永久生效的 Makefile 补丁。</p>
+<p>成功环境中使用的部署路径：</p>
+<div class="codehilite"><pre><span></span><code>/bin/sh
+/bin/consoled
+/usr/bin/login
+/usr/sbin/pwd_mkdb
+</code></pre></div>
+
+<p>为了暂时绕过旧 BSD 密码数据库中的 <code>/bin/csh</code> 配置，实验使用了 <code>/bin/csh -&gt; sh</code> 符号链接。<strong>这不是真正的 C Shell，也不意味着支持全部 csh 语法。</strong></p>
+<h2 id="nfs">NFS 根目录与隐私安全</h2>
+<p>实验使用 <code>/srv/xok-root</code> 作为 NFS 导出目录。建议正常复现时使用<strong>只读导出</strong>。历史根目录包含 <code>/etc/master.passwd</code>、<code>/etc/pwd.db</code>、<code>/etc/spwd.db</code> 等账户相关文件。<strong>未经清理的私人根目录归档和整台 VMware 虚拟机不能直接公开发布</strong>：其中可能包含密码哈希、快照、日志及机器专属配置。</p>
+<p>实验曾尝试临时开放 NFS 写入，用以重新生成 BSD 账户数据库，但 ExOS 客户端仍报告 <code>Read-only file system</code>。原生 <code>pwd_mkdb -c /etc/master.passwd</code> <strong>只读检查成功</strong>，但完整的数据库重建以及通用 NFS 写入功能<strong>尚未恢复</strong>。最终能够交互登录，依靠的是 Shell 路径兼容方案。若曾临时使用 <code>rw,no_root_squash</code>，实验结束后应恢复为限制更严格的配置。</p>
+<h2 id="_6">关键修复与未完成项目</h2>
+<p><strong>本次实际采用的修复或临时方案：</strong></p>
+<ol>
+<li>在历史 Tulip 驱动 <code>sys/dev/if_de_init.c</code> 中启用 <strong>PCI Bus Master</strong>，恢复模拟网卡通信。</li>
+<li>使用 <code>-Wl,--start-group</code> 和 <code>-Wl,--end-group</code> 修复旧版 GCC 的静态库分组参数传递，成功链接用户态程序。</li>
+<li>补齐 NFS 根目录结构，将 <code>sh</code>、<code>consoled</code>、<code>login</code> 部署至启动所需的路径。</li>
+<li>用临时 <code>/bin/csh -&gt; sh</code> 符号链接兼容旧 BSD 密码数据库中记录的默认 Shell。</li>
+</ol>
+<p><strong>仍待解决：</strong> 持续刷屏的 <code>unaccounted IRQ 15</code>、真正的 C Shell、兼容 BSD 密码数据库的正式重建、NFS 写入、更多用户态组件测试，以及在全新环境中独立完成从零复现。</p>
+<blockquote>
+<p><strong>补丁状态：</strong> 最小化修复补丁仍需从实验源码中正式提取，并与原始快照核对后才能发布。此 README 不声称 GitHub Releases 已存在尚未上传的补丁或镜像。</p>
+</blockquote>
+<h2 id="_7">发行与可复现性</h2>
+<p>计划在审查完成后通过仓库的 <strong>Releases</strong> 发布适合公开的镜像、复现资料及校验和。<strong>私人 Debian VMware 虚拟机不公开。</strong> 公开 NFS 根目录包之前必须审查并清理账户数据，同时保留必要的文件权限和符号链接。</p>
+<p>请在后续复现记录中注明准确的源码快照、GCC/ld/QEMU 版本、网络拓扑、校验和和全部补丁。2026 年 11 月 13 日的成果是在<strong>原实验环境中实际验证</strong>的，并不等于已经实现“一条命令从零安装”。</p>
+<h2 id="_8">安全、许可证与署名</h2>
+<ul>
+<li>这是已经停止维护的历史系统软件。<strong>只应在隔离的虚拟网络中研究，不要把 Debian 2.2 或 ExOS 直接暴露到不可信网络。</strong></li>
+<li>原始 Exopc 发行版包含<strong>多种版权与许可证条款</strong>。请参阅 <a href="https://pdos.csail.mit.edu/archive/exo/distrib.html">MIT 原始发行页中的许可证信息</a>，保留原始声明，重新分发之前逐项核对，不能对 MIT 或第三方代码统一宣称新的许可证。</li>
+<li>不要公开账户密码、密码哈希、SSH 私钥、未经清理的虚拟机快照和 NFS 根目录。</li>
+<li>本项目<strong>非 MIT 官方项目</strong>。Xok/ExOS 的原始成果归其历史作者及贡献者所有。</li>
+</ul>
+<h2 id="_9">致谢</h2>
+<p>感谢 MIT PDOS 的原始研究人员及所有历史贡献者公开 Xok/ExOS 的设计、资料与源码。本项目旨在保存、研究和复现他们的成果，而非取代原项目或主张原始作者身份。</p>
+<h1 id="github">GitHub仓库链接</h1>
+<p><a href="https://github.com/Evan-Windproof/xok-exos-revival">https://github.com/Evan-Windproof/xok-exos-revival</a></p></div></article><nav class="post-nav"><a href="/blog/hooftty/"><span data-i18n="previousPost">上一篇</span>：HoofTTY-一个My Little Pony主题的纯文本操作系统</a></nav></main><footer class="blog-footer"><a href="https://github.com/Evan-Windproof">Evan Windproof</a> · Personal Technology Blog · <a href="/">Evavind Desktop</a> · <a href="mailto:evan.windproof@tutanota.de" aria-label="Email Evan Windproof">evan.windproof@tutanota.de</a></footer></body></html>

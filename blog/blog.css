@@ -13,3 +13,9 @@
 .tag-link:hover { border-color: var(--green); }
 .tag-link:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .tag-count { color: var(--muted); }
+
+#article-list { scroll-margin-top: 20px; }
+.blog-pagination { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 24px 0; }
+.blog-pagination a, .blog-pagination [aria-current] { padding: 4px 10px; border: 1px solid var(--line); border-radius: 6px; }
+.blog-pagination [aria-current] { border-color: var(--green); color: var(--green); font-weight: 600; }
+.pagination-count { flex-basis: 100%; color: var(--muted); }

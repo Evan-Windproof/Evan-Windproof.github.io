@@ -6,6 +6,7 @@ import markdown, yaml, bleach
 from pygments.formatters import HtmlFormatter
 ROOT=Path(__file__).resolve().parents[1]
 BASE='https://evanwindproof.top'
+PAGE_SIZE = 12
 def esc(s): return html.escape(str(s),quote=True)
 def tag_key(name):
     return unicodedata.normalize('NFC', name.strip()).casefold()
@@ -59,6 +60,55 @@ def shell(title,desc,path,body,language='zh-CN',article=False):
     return f'''<!doctype html><html lang="{esc(language)}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(title)} — Evan Windproof</title><meta name="description" content="{esc(desc)}"><link rel="canonical" href="{BASE}{path}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}"><meta property="og:url" content="{BASE}{path}"><meta property="og:type" content="{'article' if article else 'website'}"><meta property="og:site_name" content="Evan Windproof"><link rel="alternate" type="application/rss+xml" title="Evan Windproof RSS" href="/rss.xml"><link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/blog/blog.css"><script src="/locales/zh-CN.js" defer></script><script src="/locales/zh-TW.js" defer></script><script src="/locales/en.js" defer></script><script src="/js/i18n.js" defer></script><script src="/blog/blog.js" defer></script></head><body class="blog-body"><header class="blog-header"><a href="/" data-i18n="backDesktop">返回桌面</a><nav><a href="/blog/">Blog</a><a href="/blog/tags/" data-i18n="blogTags">标签</a><a href="/rss.xml">RSS</a></nav><label><span data-i18n="language">Language / 语言</span><select id="blog-language"><option value="zh-CN">简体中文</option><option value="zh-TW">繁體中文</option><option value="en">English</option></select></label><button id="blog-theme" data-i18n="appearance">外观</button></header><main class="blog-main">{body}</main><footer class="blog-footer"><a href="https://github.com/Evan-Windproof">Evan Windproof</a> · Personal Technology Blog · <a href="/">Evavind Desktop</a> · <a href="mailto:evan.windproof@tutanota.de" aria-label="Email Evan Windproof">evan.windproof@tutanota.de</a></footer></body></html>'''
 def card(p):
     return f'<article class="post-card" data-search="{esc(" ".join([p["title"],p["description"],p["category"],*p["tags"]]))}"><time datetime="{p["date"]}">{p["date"]}</time><h2><a href="{p["url"]}">{esc(p["title"])}</a></h2><p>{esc(p["description"])}</p><p class="muted">{esc(p["category"])}</p>{tag_links(p["tags"])}</article>'
+def page_path(base, number):
+    return base if number == 1 else f'{base}page/{number}/'
+
+
+def pagination(base, current, pages, count):
+    if pages <= 1:
+        return ''
+    links = []
+    if current > 1:
+        links.append(f'<a rel="prev" href="{page_path(base, current - 1)}#article-list" data-i18n="blogPrevPage">上一页</a>')
+    numbers = sorted({1, pages, *range(max(1, current - 1), min(pages, current + 1) + 1)})
+    previous = 0
+    for number in numbers:
+        if number - previous == 2:
+            links.append(f'<a href="{page_path(base, previous + 1)}#article-list">{previous + 1}</a>')
+        elif number - previous > 2:
+            links.append('<span aria-hidden="true">…</span>')
+        if number == current:
+            links.append(f'<span aria-current="page">{number}</span>')
+        else:
+            links.append(f'<a href="{page_path(base, number)}#article-list">{number}</a>')
+        previous = number
+    if current < pages:
+        links.append(f'<a rel="next" href="{page_path(base, current + 1)}#article-list" data-i18n="blogNextPage">下一页</a>')
+    return (f'<nav class="blog-pagination" aria-label="文章分页" data-i18n-aria-label="blogPagination">{"".join(links)}'
+            f'<span class="pagination-count" data-post-count="{count}">共 {count} 篇文章</span></nav>')
+
+
+def write_listing(base, title, description, heading, posts):
+    pages = max(1, (len(posts) + PAGE_SIZE - 1) // PAGE_SIZE)
+    paths = []
+    for number in range(1, pages + 1):
+        path = page_path(base, number)
+        start = (number - 1) * PAGE_SIZE
+        cards = ''.join(map(card, posts[start:start + PAGE_SIZE]))
+        body = (heading
+                + '<label class="search-label"><span data-i18n="blogSearch">搜索文章</span><input id="blog-search" type="search"></label>'
+                + f'<section id="article-list" tabindex="-1" data-list-base="{base}" data-page-size="{PAGE_SIZE}" data-page-count="{pages}">'
+                + '<p id="search-empty" role="status" hidden data-i18n="noPosts">没有匹配的文章</p>'
+                + '<p id="search-error" role="status" hidden data-i18n="blogSearchError">无法加载文章索引</p>'
+                + f'<div id="article-cards">{cards}</div><div id="article-pagination">{pagination(base, number, pages, len(posts))}</div></section>')
+        target = ROOT / path.lstrip('/') / 'index.html'
+        target.parent.mkdir(parents=True, exist_ok=True)
+        page_title = title if number == 1 else f'{title} · Page {number}'
+        target.write_text(shell(page_title, description, path, body))
+        paths.append(path)
+    return paths
+
+
 def write_tags(out, posts):
     groups = {}
     ids = {}
@@ -78,12 +128,8 @@ def write_tags(out, posts):
     for key, (name, articles) in sorted(groups.items()):
         url = tag_url(name)
         overview.append(f'<a class="tag-link" href="{url}">{esc(name)} <span class="tag-count">({len(articles)})</span></a>')
-        directory = root / tag_id(key)
-        directory.mkdir(exist_ok=True)
-        body = (f'<a href="/blog/tags/" data-i18n="blogAllTags">所有标签</a><h1>{esc(name)}</h1>'
-                + ''.join(map(card, articles)))
-        (directory / 'index.html').write_text(shell(name, f'Articles tagged {name}', url, body))
-        paths.append(url)
+        heading = f'<a href="/blog/tags/" data-i18n="blogAllTags">所有标签</a><h1>{esc(name)}</h1>'
+        paths.extend(write_listing(url, name, f'Articles tagged {name}', heading, articles))
     overview.append('</div>')
     if not groups:
         overview.append('<p data-i18n="blogNoTags">暂无标签</p>')
@@ -106,13 +152,16 @@ def build():
         toc=f'<details open class="toc"><summary data-i18n="contents">目录</summary>{p["toc"]}</details>' if p['toc'] else ''
         body=f'<a href="/blog/" data-i18n="backBlog">返回博客首页</a><article lang="{esc(p["language"])}"><header><h1>{esc(p["title"])}</h1><p><time datetime="{p["date"]}">{p["date"]}</time> · <span data-i18n="updated">更新</span> {p["updated"]}</p><p>{esc(p["category"])}</p>{tag_links(p["tags"])}<p class="muted">{esc(p["description"])}</p></header>{toc}<div class="prose">{p["body"]}</div></article><nav class="post-nav">{"".join(links)}</nav>'
         target=out/p['slug']/'index.html';target.parent.mkdir(exist_ok=True);target.write_text(shell(p['title'],p['description'],p['url'],body,p['language'],True));files.append(str(target.relative_to(ROOT)))
-    listing='<p class="eyebrow">SYSTEMS / CODE / OPEN SOURCE</p><h1>Evan Windproof</h1><p data-i18n="blogIntro">独立技术博客：操作系统、系统编程与开源实验。</p><label class="search-label"><span data-i18n="blogSearch">搜索文章</span><input id="blog-search" type="search"></label><p id="search-empty" hidden data-i18n="noPosts">没有匹配的文章</p>'+''.join(map(card,posts))
-    (out/'index.html').write_text(shell('Personal Technology Blog','操作系统、C / C++ / Rust 系统编程、开源项目与开发笔记。','/blog/',listing))
+    heading = ('<p class="eyebrow">SYSTEMS / CODE / OPEN SOURCE</p><h1>Evan Windproof</h1>'
+               '<p data-i18n="blogIntro">独立技术博客：操作系统、系统编程与开源实验。</p>')
+    listing_paths = write_listing('/blog/', 'Personal Technology Blog',
+                                  '操作系统、C / C++ / Rust 系统编程、开源项目与开发笔记。', heading, posts)
     tag_paths = write_tags(out, posts)
-    files.extend(path.lstrip('/') + 'index.html' for path in tag_paths)
+    files.extend(path.lstrip('/') + 'index.html' for path in listing_paths + tag_paths)
     manifest.write_text(json.dumps(files,indent=2))
     fields = ('title', 'description', 'date', 'slug', 'url', 'category', 'tags', 'language')
-    index = [{key: post[key] for key in fields} for post in posts]
+    index = [dict({key: post[key] for key in fields}, tagUrls=[tag_url(tag) for tag in post['tags']])
+             for post in posts]
     (out/'articles.json').write_text(json.dumps(index, ensure_ascii=False, indent=2) + '\n')
     rss=ET.Element('rss',version='2.0');channel=ET.SubElement(rss,'channel')
     for k,v in [('title','Evan Windproof — Personal Technology Blog'),('link',BASE+'/blog/'),('description','Systems programming, operating systems and open-source notes.')]:ET.SubElement(channel,k).text=v
@@ -121,7 +170,7 @@ def build():
         for k,v in [('title',p['title']),('link',BASE+p['url']),('guid',BASE+p['url']),('description',p['description']),('pubDate',email.utils.format_datetime(dt.datetime.fromisoformat(p['date']).replace(tzinfo=dt.timezone.utc)))]: ET.SubElement(item,k).text=v
     ET.ElementTree(rss).write(ROOT/'rss.xml',encoding='utf-8',xml_declaration=True)
     ns='http://www.sitemaps.org/schemas/sitemap/0.9';ET.register_namespace('',ns);sitemap=ET.Element('{'+ns+'}urlset')
-    for path in ['/','/blog/','/projects/hooftty/']+[p['url'] for p in posts]+tag_paths:ET.SubElement(ET.SubElement(sitemap,'{'+ns+'}url'),'{'+ns+'}loc').text=BASE+path
+    for path in ['/','/blog/','/projects/hooftty/']+[p['url'] for p in posts]+listing_paths[1:]+tag_paths:ET.SubElement(ET.SubElement(sitemap,'{'+ns+'}url'),'{'+ns+'}loc').text=BASE+path
     ET.ElementTree(sitemap).write(ROOT/'sitemap.xml',encoding='utf-8',xml_declaration=True)
     (ROOT/'robots.txt').write_text(f'User-agent: *\nAllow: /\nSitemap: {BASE}/sitemap.xml\n')
     latest='<section class="latest-posts" aria-label="Latest articles"><h2 data-i18n="latestPosts">最新文章</h2>'+''.join(f'<a href="{p["url"]}"><time>{p["date"]}</time> {esc(p["title"])}</a>' for p in posts[:3])+'</section>'

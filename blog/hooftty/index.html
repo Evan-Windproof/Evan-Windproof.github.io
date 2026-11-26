@@ -1,0 +1,47 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HoofTTY-一个My Little Pony主题的纯文本操作系统 — Evan Windproof</title><meta name="description" content="基于Kernseed OS开发"><link rel="canonical" href="https://evanwindproof.top/blog/hooftty/"><meta property="og:title" content="HoofTTY-一个My Little Pony主题的纯文本操作系统"><meta property="og:description" content="基于Kernseed OS开发"><meta property="og:url" content="https://evanwindproof.top/blog/hooftty/"><meta property="og:type" content="article"><meta property="og:site_name" content="Evan Windproof"><link rel="alternate" type="application/rss+xml" title="Evan Windproof RSS" href="/rss.xml"><link rel="icon" type="image/svg+xml" href="/assets/favicon.svg"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/blog/blog.css"><script src="/locales/zh-CN.js" defer></script><script src="/locales/zh-TW.js" defer></script><script src="/locales/en.js" defer></script><script src="/js/i18n.js" defer></script><script src="/blog/blog.js" defer></script></head><body class="blog-body"><header class="blog-header"><a href="/" data-i18n="backDesktop">返回桌面</a><nav><a href="/blog/">Blog</a><a href="/blog/tags/" data-i18n="blogTags">标签</a><a href="/rss.xml">RSS</a></nav><label><span data-i18n="language">Language / 语言</span><select id="blog-language"><option value="zh-CN">简体中文</option><option value="zh-TW">繁體中文</option><option value="en">English</option></select></label><button id="blog-theme" data-i18n="appearance">外观</button></header><main class="blog-main"><a href="/blog/" data-i18n="backBlog">返回博客首页</a><article lang="zh-CN"><header><h1>HoofTTY-一个My Little Pony主题的纯文本操作系统</h1><p><time datetime="2026-11-25">2026-11-25</time> · <span data-i18n="updated">更新</span> 2026-11-25</p><p>项目介绍</p><div class="tag-list"><a class="tag-link" href="/blog/tags/u_4aa1a3c6743f7d8e154a5a04920d03d6d0d9d6d5422fb02d39228da07e83ae1c/">技术</a><a class="tag-link" href="/blog/tags/u_16dc8ea1cf4807b0db5c890f39c970a66f240e2d28617c0a53a7c5e0c0c4cbf0/">开源</a><a class="tag-link" href="/blog/tags/u_79f326be4409d51fe60f4edc03b20c4b94de952d626e1616790e7b2384f08f00/">项目</a><a class="tag-link" href="/blog/tags/u_360480034cc3e9d32da9e262f001b129f80ddea134733a2e8b6268032aa139ab/">操作系统</a></div><p class="muted">基于Kernseed OS开发</p></header><details open class="toc"><summary data-i18n="contents">目录</summary><div class="toc">
+<ul>
+<li><a href="#_1">介绍</a></li>
+<li><a href="#_2">截图</a></li>
+<li><a href="#_3">未来</a><ul>
+<li><a href="#_4">后续方向（尚未承诺实现）</a></li>
+</ul>
+</li>
+<li><a href="#_5">杂谈</a><ul>
+<li><a href="#_6">许可证与同人声明</a></li>
+<li><a href="#_7">链接</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</details><div class="prose"><h2 id="_1">介绍</h2>
+<p>名称：HoofTTY</p>
+<p>类型：操作系统</p>
+<p>CPU架构：x86_64</p>
+<p>是否为Linux发行版：否</p>
+<p>性质：受《My Little Pony》（小马宝莉）启发的 x86-64 纯文本操作系统。</p>
+<p>开源协议：GPL-3.0</p>
+<p>是否使用AI开发：Kernseed是，但HoofTTY是半AI半人工。</p>
+<p>目前状态：已更新至Beta 0.4.0，并且会持续更新。</p>
+<p>HoofTTY在测试中成功在QEMU和VMware虚拟机中运行。相较于Kernseed OS，已支持中文和小写英文字母，并且支持输入光标。</p>
+<h2 id="_2">截图</h2>
+<p><img alt="HoofTTY" src="https://ik.imagekit.io/lp7vr9041i/blog/OS/hoofTTY1.webp"></p>
+<h2 id="_3">未来</h2>
+<h3 id="_4">后续方向（尚未承诺实现）</h3>
+<ul>
+<li>改善像素头像的布局、分辨率适配与绘图测试。</li>
+<li>让颜色继承行为可控，逐步研究背景颜色与 ANSI 支持。</li>
+<li>丰富原创小马资源和互动指令；<code>pony</code> 等需实际实现后再列入功能。</li>
+<li>在终端基础完善之后，再考虑 Unicode 与简繁中文显示。</li>
+</ul>
+<h1 id="_5">杂谈</h1>
+<p>HoofTTY在我这里更多的也只是学习中的一个兴趣项目，终究有一天会完结或者超低频</p>
+<p>维护。但是我确实规划了另一个My Little Pony主题的操作系统——<a href="https://github.com/Evan-Windproof/Liberpony-OS">Liberpony</a>。</p>
+<h2 id="_6">许可证与同人声明</h2>
+<p>本仓库自有代码（包括继承的 Kernseed 代码）采用 <strong>GNU GPL 第 3 版或由您选择的任何后续版本（<code>GPL-3.0-or-later</code>）</strong>。允许商业与非商业使用、修改和再分发，但必须遵守 GPL；正式 GPLv3 全文见 <a href="LICENSE">LICENSE</a>。HoofTTY 是基于 <a href="https://github.com/Evan-Windproof/Kernseed_OS">Kernseed OS</a> 的派生项目。第三方组件保留原许可证，详情见 <a href="THIRD_PARTY_LICENSES.md">THIRD_PARTY_LICENSES.md</a>。本次变更不会撤销历史 Release 已授予的许可，历史版本仍应按其原有声明和条款使用；旧 PolyForm 文本保留为<a href="docs/licenses/PolyForm-Noncommercial-1.0.0.md">历史记录</a>。仓库许可不自动授权第三方角色、美术、商标和媒体素材。</p>
+<p>《My Little Pony》及相关知识产权归各自权利人所有。HoofTTY 是非官方同人项</p>
+<p>目，未受到官方授权或赞助。</p>
+<h2 id="_7">链接</h2>
+<p>官网：<a href="https://hooftty.evanwindproof.top">https://hooftty.evanwindproof.top</a></p>
+<p>GitHub：<a href="https://github.com/Evan-Windproof/HoofTTY">https://github.com/Evan-Windproof/HoofTTY</a> （最新）</p>
+<p>GitLab：<a href="https://gitlab.com/Evan-Windproof/HoofTTY">https://gitlab.com/Evan-Windproof/HoofTTY</a></p>
+<p>Codeberq：<a href="https://codeberg.org/Evan_Windproof/HoofTTY">https://codeberg.org/Evan_Windproof/HoofTTY</a></p></div></article><nav class="post-nav"><a href="/blog/kernseed/"><span data-i18n="previousPost">上一篇</span>：Kernseed OS：小型x86_64操作系统</a><a href="/blog/xok-exos/"><span data-i18n="nextPost">下一篇</span>：MIT Xok/ExOS复活</a></nav></main><footer class="blog-footer"><a href="https://github.com/Evan-Windproof">Evan Windproof</a> · Personal Technology Blog · <a href="/">Evavind Desktop</a> · <a href="mailto:evan.windproof@tutanota.de" aria-label="Email Evan Windproof">evan.windproof@tutanota.de</a></footer></body></html>

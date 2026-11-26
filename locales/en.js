@@ -96,3 +96,5 @@ Object.assign(window.EvavindLocales['en'], {
 });
 
 Object.assign(window.EvavindLocales["en"], {"blog": "Technology Blog", "enterBlog": "Enter the technology blog", "latestPosts": "Latest articles", "blogIntro": "Independent technology blog: operating systems, systems programming and open-source experiments.", "blogSearch": "Search articles", "noPosts": "No matching articles", "contents": "Contents", "updated": "Updated", "previousPost": "Previous article", "nextPost": "Next article", "backBlog": "Back to blog", "meta": "Independent technology blog: operating systems, systems programming and open-source experiments."});
+
+Object.assign(window.EvavindLocales['en'], {"blogPrevPage": "Previous page", "blogNextPage": "Next page", "blogPagination": "Article pages", "blogPostCount": "Articles: {count}", "blogSearchError": "Unable to load the article index. Try refreshing."});
