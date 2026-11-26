@@ -59,6 +59,8 @@ HoofTTY在我这里更多的也只是学习中的一个兴趣项目，终究有�
 
 ## 链接
 
+官网：<https://hooftty.evanwindproof.top>
+
 GitHub：<https://github.com/Evan-Windproof/HoofTTY> （最新）
 
 GitLab：<https://gitlab.com/Evan-Windproof/HoofTTY>
