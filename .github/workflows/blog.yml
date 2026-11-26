@@ -1,4 +1,4 @@
-name: Build and deploy technology blog
+name: Build and test technology blog (Cloudflare hosting)
 on:
   push:
     branches: [main]
@@ -92,7 +92,7 @@ jobs:
       - run: python3 scripts/indexnow_deploy.py prepare "$RUNNER_TEMP/indexnow-manifest.json" --commit "$GITHUB_SHA"
   deploy:
     needs: [build, indexnow_prepare]
-    if: ${{ !cancelled() && needs.build.result == 'success' && github.ref == 'refs/heads/main' }}
+    if: false # GitHub Pages deployment retired; production hosting is on Cloudflare.
     runs-on: ubuntu-latest
     permissions:
       contents: read
