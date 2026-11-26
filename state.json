@@ -168,23 +168,16 @@
   "notifications": {
     "accepted": {
       "https://evanwindproof.top/blog/hooftty/": {
-        "event": "e61f8e72cdb67f0b2cea72e0565c8631ebf4fbf0",
+        "event": "f4eebcea87b822ca000a5773ac507c3c53d7ecb6",
         "http_status": 200,
         "kind": "current",
-        "proof": "e61f8e72cdb67f0b2cea72e0565c8631ebf4fbf0",
+        "proof": "f4eebcea87b822ca000a5773ac507c3c53d7ecb6",
         "result": "received",
         "retry_count": 0,
-        "timestamp": "2026-11-25T09:11:59.700796+00:00"
+        "timestamp": "2026-11-26T03:18:43.619843+00:00"
       }
     },
-    "pending": {
-      "https://evanwindproof.top/blog/hooftty/": {
-        "blocked": false,
-        "event": "f4eebcea87b822ca000a5773ac507c3c53d7ecb6",
-        "kind": "current",
-        "proof": "f4eebcea87b822ca000a5773ac507c3c53d7ecb6"
-      }
-    }
+    "pending": {}
   },
   "schema_version": 1
 }
