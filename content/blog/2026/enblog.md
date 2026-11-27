@@ -27,6 +27,6 @@ language: zh-CN
 
 目前仅仅只是中文博客去了中文和文章，未来会陆续将我现有项目挨个介绍发布到博客。
 
-![英文博客]([personal](https://ik.imagekit.io/lp7vr9041i/blog/personal/enblog.png))
+![英文博客](https://ik.imagekit.io/lp7vr9041i/blog/personal/enblog.png)
 
 链接：<https://en.evanwindproof.top>
