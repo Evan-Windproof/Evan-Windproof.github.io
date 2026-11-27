@@ -10,7 +10,7 @@
 - `scripts/build_blog.py`：生成独立 `/blog/<slug>/index.html`、列表、首页最新文章、`rss.xml`、`sitemap.xml` 和 `robots.txt`。
 - `blog/blog.css`、`blog/blog.js`：阅读主题、本地搜索、三语言界面，沿用原设置存储。
 - `requirements-blog.txt`：固定生成依赖（Markdown/Pygments/PyYAML/Bleach）；运行站点不需要 Python。
-- `.github/workflows/blog.yml`：推送 main 后构建静态产物并通过官方 Pages Actions 发布，复用现有 Pages 站点并保留 CNAME；如仍有原生分支构建，先等待同一提交的旧构建结束，再发布新产物以防覆盖。
+- Cloudflare Workers Builds：监听该 GitHub 仓库的 `main` 分支，执行 `scripts/build_cloudflare_assets.sh`（构建博客、运行测试并准备静态资源），随后执行 `scripts/prepare_cloudflare_assets.py --verify` 和 Wrangler 部署。生产站点由 `evan-windproof-github-io` Worker 提供，不通过 GitHub Pages Actions 发布。
 
 每篇 Markdown 必须填写 `title`、`description`、`date`、`updated`、`tags`（数组）、`category`、`slug`（全站唯一小写英文短横线）、`draft`（布尔值）、`language`。日期为 YYYY-MM-DD，正文从二级标题开始；slug 发布后保持不变。`draft: true` 不进入页面、搜索、RSS、首页或 sitemap。文章按日期降序排列，相邻文章导航在有相邻文章时显示。当前仅一篇明确标注的简体中文示例，无虚构成果或翻译。
 
@@ -23,11 +23,11 @@ python3 -m http.server 8000
 
 直接访问 `/blog/` 和 `/blog/example-systems-note/`，刷新无需桌面路由。支持 fenced code（c/cpp/rust/python/bash）、表格、图片、链接、目录和锚点；原始 HTML 经白名单清理。图片放 assets，正文路径建议从 `/assets/` 开始。本地搜索覆盖标题、摘要、分类与标签，不发送网络请求。切换界面语言不会翻译文章。
 
-生成文件一并提交便于普通静态预览；CI 每次从 Markdown 重新生成。不要手改生成文章 HTML、RSS、sitemap、highlight.css 或首页 latest 标记区域。删除文章后重新构建会依据 `blog/.generated.json` 清除旧生成页面。旧 `articles/` 内容继续按旧发布方式维护，不自动迁移或删除。
+生成文件一并提交便于静态预览；Cloudflare Workers Builds 每次从 Markdown 重新生成并部署。不要手改生成文章 HTML、RSS、sitemap、highlight.css 或首页 latest 标记区域。删除文章后重新构建会依据 `blog/.generated.json` 清除旧生成页面。旧 `articles/` 内容继续按旧发布方式维护，不自动迁移或删除。
 
 ## 验证与部署
 
-`python scripts/build_blog.py`、`node tests/blog.cjs`（需本地 8000 HTTP 服务）、以及下方原桌面回归测试。博客测试覆盖无 JS 独立阅读/刷新、Markdown 表格/高亮/图片/目录、搜索、RSS/sitemap、主题/繁体界面、手机排版与旧项目入口。部署使用 GitHub Pages 官方 artifact/deploy 流程，无商业服务或数据库。若仓库策略拒绝 Actions 更新 Pages source，需要管理员在 Settings → Pages → Build and deployment 选择 GitHub Actions；不要删除 CNAME 或其他项目仓库。
+本地验证可运行 `bash scripts/build_cloudflare_assets.sh`；该脚本会构建博客并运行 Python 与 Chromium 回归测试。生产部署由 Cloudflare Workers Builds 自动完成：GitHub `main` 有新提交时，Cloudflare 执行构建命令 `bash scripts/build_cloudflare_assets.sh`，再验证 `dist/` 并运行 `npx wrangler deploy --config wrangler.jsonc`。Worker 名称为 `evan-windproof-github-io`，正式域名为 `evanwindproof.top`。GitHub Actions 中旧的 Pages 发布流程已停用，不应再作为生产部署依据。
 
 # Evavind — Concept Version · Phase 3.1
 
@@ -39,7 +39,7 @@ Evan Windproof 的个人网站，基于 Phase 1 桌面架构增量开发。HTML�
 python3 -m http.server 8000
 ```
 
-打开 http://localhost:8000 。桌面也可直接打开 `index.html`，但文章正文通过 fetch 加载，需使用 HTTP 服务器预览。所有资源使用相对路径，兼容现有 GitHub Pages 托管。
+打开 http://localhost:8000 。桌面也可直接打开 `index.html`，但文章正文通过 fetch 加载，需使用 HTTP 服务器预览。所有资源使用相对路径，兼容静态资源托管。
 
 ## 联系方式
 
