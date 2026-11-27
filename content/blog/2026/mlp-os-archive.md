@@ -97,17 +97,11 @@ MLP OS Archive 并不打算成为一个简单的链接收藏网站。
 
 ## 5. 项目访问与参与
 
-官方网站：
+官方网站：<https://mlpos.evanwindproof.top>
 
-<https://mlpos.evanwindproof.top>
+项目目录：<https://mlpos.evanwindproof.top/catalog/>
 
-项目目录：
-
-<https://mlpos.evanwindproof.top/catalog/>
-
-社区贡献入口：
-
-<https://mlpos.evanwindproof.top/contribute/>
+社区贡献入口：<https://mlpos.evanwindproof.top/contribute/>
 
 档案馆是一个独立、非商业的粉丝历史保存项目，与 Hasbro 没有任何隶属、授权或官方合作关系。
 
