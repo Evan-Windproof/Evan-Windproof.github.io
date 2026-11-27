@@ -37,9 +37,11 @@
 .project-card-hooftty a:focus-visible { outline: 2px dashed #60ff68; outline-offset: 3px; }
 .project-links { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 12px; font-size: 12px; }
 
+.blog-language-switch {
+  margin-top: 8px;
+}
+
 .blog-language-link {
-  display: block;
-  width: max-content;
-  margin: 10px auto 0;
+  display: inline-block;
   font-size: 14px;
 }
