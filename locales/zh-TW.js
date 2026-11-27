@@ -95,6 +95,6 @@ Object.assign(window.EvavindLocales['zh-TW'], {
   "dockHint": "自動隱藏：移至或點選底部區域，或用 Tab 聚焦展開區域。Ctrl + Alt + D 在始終隱藏與始終顯示之間切換。右上角設定按鈕始終可用。"
 });
 
-Object.assign(window.EvavindLocales["zh-TW"], {"blog": "技術部落格", "enterBlog": "進入中文部落格", "chooseBlogLanguage": "選擇部落格語言 / Choose your preferred language", "latestPosts": "最新文章", "blogIntro": "獨立技術部落格：作業系統、系統程式設計與開源實驗。", "blogSearch": "搜尋文章", "noPosts": "沒有匹配的文章", "contents": "目錄", "updated": "更新", "previousPost": "上一篇", "nextPost": "下一篇", "backBlog": "返回部落格首頁", "meta": "獨立技術部落格：作業系統、系統程式設計與開源實驗。"});
+Object.assign(window.EvavindLocales["zh-TW"], {"blog": "技術部落格", "enterBlog": "進入技術部落格", "latestPosts": "最新文章", "blogIntro": "獨立技術部落格：作業系統、系統程式設計與開源實驗。", "blogSearch": "搜尋文章", "noPosts": "沒有匹配的文章", "contents": "目錄", "updated": "更新", "previousPost": "上一篇", "nextPost": "下一篇", "backBlog": "返回部落格首頁", "meta": "獨立技術部落格：作業系統、系統程式設計與開源實驗。"});
 
 Object.assign(window.EvavindLocales['zh-TW'], {"blogPrevPage": "上一頁", "blogNextPage": "下一頁", "blogPagination": "文章分頁", "blogPostCount": "共 {count} 篇文章", "blogSearchError": "無法載入文章索引，請重新整理後再試。"});
