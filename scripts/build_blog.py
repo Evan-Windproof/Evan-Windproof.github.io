@@ -173,7 +173,7 @@ def build():
     for path in ['/','/blog/']+[p['url'] for p in posts]+listing_paths[1:]+tag_paths:ET.SubElement(ET.SubElement(sitemap,'{'+ns+'}url'),'{'+ns+'}loc').text=BASE+path
     ET.ElementTree(sitemap).write(ROOT/'sitemap.xml',encoding='utf-8',xml_declaration=True)
     (ROOT/'robots.txt').write_text(f'User-agent: *\nAllow: /\nSitemap: {BASE}/sitemap.xml\n')
-    latest='<section class="latest-posts" aria-label="Latest articles"><h2 data-i18n="latestPosts">最新文章</h2>'+''.join(f'<a href="{p["url"]}"><time>{p["date"]}</time> {esc(p["title"])}</a>' for p in posts[:3])+'</section>'
+    latest='<section class="latest-posts" aria-label="Latest articles"><h2 data-i18n="latestPosts">最新文章</h2>'+''.join(f'<a href="{p["url"]}"><time>{p["date"]}</time> {esc(p["title"])}</a>' for p in posts[:2])+'</section>'
     home=ROOT/'index.html';text=home.read_text();text=re.sub(r'<!-- latest:start -->.*?<!-- latest:end -->','<!-- latest:start -->'+latest+'<!-- latest:end -->',text,flags=re.S);home.write_text(text)
     (out/'highlight.css').write_text(HtmlFormatter().get_style_defs('.codehilite'))
     print(f'Built {len(posts)} published posts')
