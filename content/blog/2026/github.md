@@ -5,7 +5,7 @@ date: 2026-11-27
 updated: 2026-11-27
 tags: [GitHub, 里程碑]
 category: 里程碑
-slug: GitHub-Developer-Program
+slug: github-developer-program
 draft: false
 language: zh-CN
 ---
@@ -13,10 +13,10 @@ language: zh-CN
 
 ![GitHub](https://ik.imagekit.io/lp7vr9041i/blog/personal/github2.webp)
 
-![Github]([/assets/blog/google.png](https://ik.imagekit.io/lp7vr9041i/blog/personal/github.webp))
+![GitHub](https://ik.imagekit.io/lp7vr9041i/blog/personal/github.webp)
 
 我的公开邮箱：<evan.windproof@tutanota.de>
 
 个人网站：<https://evanwindproof.top>
 
-我的GitHub主页：<https://github.com/Evan-WIndproof>
+我的GitHub主页：<https://github.com/Evan-Windproof>
