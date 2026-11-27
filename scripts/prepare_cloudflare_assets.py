@@ -27,7 +27,6 @@ PUBLIC_TREES = {
     "locales": {".js"},
     "projects": MEDIA | {".html", ".css", ".js"},
 }
-PUBLIC_PROJECT_LICENSE = Path("projects/hooftty/silkscreen-OFL.txt")
 PRIVATE_DIRS = {"content", "node_modules", "scripts", "tests", "work", "venv", "__pycache__"}
 
 
@@ -80,7 +79,7 @@ def public_files(root):
     key_path = Path(f"{key}.txt")
     if not git(root, "ls-files", "-z", "--", str(key_path)):
         raise ValueError("The public IndexNow verification file must be tracked.")
-    paths = ROOT_FILES | BLOG_FILES | {PUBLIC_PROJECT_LICENSE, key_path}
+    paths = ROOT_FILES | BLOG_FILES | {key_path}
     paths.update(tracked_public_files(root))
     paths.update(generated_html(root))
     for path in paths:

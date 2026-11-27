@@ -10,7 +10,7 @@ window.Projects = (() => {
     ['Glivand OS', 'Glivand-OS', 'systems', null, ['仓库为私有，无法核验公开项目说明、许可证或开发进度。','儲存庫為私人，無法查證公開專案說明、授權條款或開發進度。','The repository is private. Its public description, license and development progress could not be verified.']],
     ['Liberums', 'Liberums', 'research', 'maintenance', ['用于研究与教学的 C11/i686 外核。v1.0.0 建立了教学基线，主要功能开发已结束。','用於研究與教學的 C11/i686 外核心。v1.0.0 建立教學基準，主要功能開發已結束。','A C11/i686 research and teaching exokernel. v1.0.0 establishes the educational baseline after major feature development.']],
     ['Kernseed OS', 'Kernseed_OS', 'research', 'archived', ['以 C 和汇编实现的 x86-64 教学单体操作系统。项目已完成，无定期维护计划。','以 C 與組合語言實作的 x86-64 教學單體作業系統。專案已完成，無定期維護計畫。','An educational x86-64 monolithic OS written in C and assembly. Completed, with no regular maintenance planned.']],
-    ['HoofTTY', 'HoofTTY', 'research', 'beta', ['基于 Kernseed OS 的小马主题文本优先爱好者系统，有独立内核和 Shell。','源自 Kernseed OS 的小馬主題純文字優先同好作業系統，具備獨立核心與 Shell。','A pony-inspired, text-first hobby OS based on Kernseed OS, with its own kernel and shell.'], '/projects/hooftty/'],
+    ['HoofTTY', 'HoofTTY', 'research', 'beta', ['基于 Kernseed OS 的小马主题文本优先爱好者系统，有独立内核和 Shell。','源自 Kernseed OS 的小馬主題純文字優先同好作業系統，具備獨立核心與 Shell。','A pony-inspired, text-first hobby OS based on Kernseed OS, with its own kernel and shell.'], 'https://hooftty.evanwindproof.top/'],
     ['LinuxLibOS', 'LinuxLibOS', 'research', null, ['基于 Liberums 的独立 i686 Ring 3 库操作系统，研究受限执行静态 Linux i386 ELF32。','以 Liberums 為基礎的獨立 i686 Ring 3 函式庫作業系統，研究在受限環境中執行靜態 Linux i386 ELF32。','An independent i686 Ring 3 Library OS for Liberums that explores restricted execution of static Linux i386 ELF32 binaries.']],
     ['Aelthuvor', 'Aelthuvor', 'research', null, ['面向 Liberums 的独立 C11/i686 Ring 3 库操作系统及应用 SDK。','供 Liberums 使用的獨立 C11/i686 Ring 3 函式庫作業系統與應用程式 SDK。','An independent C11/i686 Ring 3 Library OS and application SDK for Liberums.']],
     ['Aelthoren', 'Aelthoren', 'applications', 'discontinued', ['基于 Gecko 的实验性浏览器，探索轻量、隐私和无账户设计。','以 Gecko 為基礎的實驗性瀏覽器，探索輕量化、隱私保護及免帳號設計。','An experimental Gecko-based browser exploring lightweight, private, account-free design.']],
@@ -45,7 +45,7 @@ window.Projects = (() => {
   function card([name, repo, group, status, , website]) {
     const {text} = I18n;
     const isHoofTTY = repo === 'HoofTTY';
-    const offsite = website && !website.startsWith('/');
+    const opensNewTab = website && !isHoofTTY && !website.startsWith('/');
     return `<article class="card project-card${isHoofTTY ? ' project-card-hooftty' : ''}">
       ${text(group, 'span', 'tag')}
       <h3>${isHoofTTY ? `<a href="${website}"><span aria-hidden="true">&gt;_ </span>${name}</a>` : name}</h3>
@@ -53,7 +53,7 @@ window.Projects = (() => {
       ${status ? text(status, 'p', 'project-status') : ''}
       <div class="project-links">
         <a href="https://github.com/Evan-Windproof/${repo}" ${external}>GitHub ↗</a>
-        ${website ? `<a href="${website}"${offsite ? ` ${external}` : ''}>${text('projectWebsite')}${offsite ? ' ↗' : ''}</a>` : ''}
+        ${website ? `<a href="${website}"${opensNewTab ? ` ${external}` : ''}>${text('projectWebsite')}${opensNewTab ? ' ↗' : ''}</a>` : ''}
       </div>
     </article>`;
   }
