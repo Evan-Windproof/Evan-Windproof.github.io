@@ -9,7 +9,7 @@ slug: github-developer-program
 draft: false
 language: zh-CN
 ---
-没什么物质奖励。但也值得纪念一下
+没什么物质奖励。但也值得纪念一下，也算是一个小的个人里程碑了。
 
 ![GitHub](https://ik.imagekit.io/lp7vr9041i/blog/personal/github2.webp)
 
