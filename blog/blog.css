@@ -19,13 +19,3 @@
 .blog-pagination a, .blog-pagination [aria-current] { padding: 4px 10px; border: 1px solid var(--line); border-radius: 6px; }
 .blog-pagination [aria-current] { border-color: var(--green); color: var(--green); font-weight: 600; }
 .pagination-count { flex-basis: 100%; color: var(--muted); }
-
-.blog-header nav {
-  flex-wrap: wrap;
-}
-
-.blog-header .blog-english-link {
-  color: var(--green);
-  font-size: 0.875em;
-  white-space: nowrap;
-}
