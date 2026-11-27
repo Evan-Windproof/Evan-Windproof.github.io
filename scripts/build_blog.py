@@ -37,7 +37,8 @@ def load_posts():
         if not required<=meta.keys(): raise ValueError(f'Missing metadata: {file}')
         if type(meta['draft']) is not bool or not isinstance(meta['tags'],list): raise ValueError('Invalid draft/tags')
         slug=meta['slug']
-        if not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*',slug) or slug in seen or slug == 'tags': raise ValueError('Invalid/duplicate slug')
+        if not isinstance(slug, str) or not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*',slug) or slug in seen or slug == 'tags':
+            raise ValueError(f'Invalid/duplicate slug {slug!r} in {file}; use unique lowercase letters, numbers, and hyphens.')
         seen.add(slug)
         for key in ['date','updated']: meta[key]=dt.date.fromisoformat(str(meta[key])).isoformat()
         if meta['updated']<meta['date']: raise ValueError('updated precedes date')
